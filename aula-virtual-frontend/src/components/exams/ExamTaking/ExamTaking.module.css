@@ -1,21 +1,18 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  min-height: calc(100vh - var(--header-height));
-  background: var(--bg-secondary);
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
 }
 
 .header {
-  background: var(--bg-primary);
-  padding: var(--spacing-lg);
-  border-bottom: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: sticky;
-  top: var(--header-height);
-  z-index: 10;
-  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background-color: var(--bg-paper);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-1);
 }
 
 .examInfo {
@@ -23,412 +20,155 @@
 }
 
 .examTitle {
-  font-size: var(--font-size-xl);
-  font-weight: 600;
-  color: var(--text-primary);
   margin: 0 0 var(--spacing-xs) 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
 }
 
-.courseName {
-  font-size: var(--font-size-md);
-  color: var(--primary-color);
+.examType {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  text-transform: uppercase;
   font-weight: 500;
-  margin: 0;
 }
 
-.examStats {
-  display: flex;
-  gap: var(--spacing-xl);
-}
-
-.statItem {
+.timeInfo {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--text-primary);
 }
 
-.statIcon {
-  color: var(--primary-color);
-}
-
-.timeRemaining {
-  font-family: 'Courier New', monospace;
-  font-size: var(--font-size-xl);
-  color: var(--primary-color);
-}
-
-.timeWarning {
-  color: var(--danger-color);
-  animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
-.examBody {
+.timer {
   display: flex;
-  flex: 1;
-  gap: var(--spacing-lg);
-  padding: var(--spacing-lg);
-}
-
-.questionNavigation {
-  width: 280px;
-  background: var(--bg-primary);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  height: fit-content;
-  position: sticky;
-  top: calc(var(--header-height) + 100px);
-}
-
-.questionNavigation h3 {
-  font-size: var(--font-size-lg);
-  color: var(--text-primary);
-  margin: 0 0 var(--spacing-lg) 0;
-  text-align: center;
-}
-
-.questionGrid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-lg);
-}
-
-.questionNavButton {
-  position: relative;
-  width: 40px;
-  height: 40px;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
   border: 2px solid var(--border-color);
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  border-radius: var(--radius-sm);
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition-fast);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.questionNavButton:hover {
-  border-color: var(--primary-color);
-  transform: scale(1.05);
+.timer.warning {
+  border-color: var(--error-color);
+  background-color: rgba(244, 67, 54, 0.1);
 }
 
-.questionNavButton.current {
-  border-color: var(--primary-color);
-  background: var(--primary-color);
-  color: var(--text-white);
-}
-
-.questionNavButton.answered {
-  border-color: var(--success-color);
-  background: rgba(76, 175, 80, 0.1);
-  color: var(--success-color);
-}
-
-.questionNavButton.flagged {
-  border-color: var(--warning-color);
-  background: rgba(255, 152, 0, 0.1);
-  color: var(--warning-color);
-}
-
-.questionNavButton.unanswered {
-  border-color: var(--border-color);
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-}
-
-.flagIcon {
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  font-size: var(--font-size-xs);
-  color: var(--warning-color);
-}
-
-.legend {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-}
-
-.legendItem {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
+.timeLabel {
   font-size: var(--font-size-sm);
   color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
 }
 
-.legendBox {
-  width: 16px;
-  height: 16px;
-  border-radius: var(--radius-sm);
-  border: 2px solid;
+.timeValue {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: 'Courier New', monospace;
 }
 
-.legendBox.answered {
-  border-color: var(--success-color);
-  background: rgba(76, 175, 80, 0.1);
+.timer.warning .timeValue {
+  color: var(--error-color);
 }
 
-.legendBox.flagged {
-  border-color: var(--warning-color);
-  background: rgba(255, 152, 0, 0.1);
-}
-
-.legendBox.unanswered {
-  border-color: var(--border-color);
-  background: var(--bg-secondary);
-}
-
-.questionSection {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.questionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.instructionsCard {
   margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-md);
-  border-bottom: 1px solid var(--border-color);
 }
 
-.questionInfo h2 {
-  font-size: var(--font-size-xl);
+.instructionsCard h3 {
+  margin: 0 0 var(--spacing-md) 0;
   color: var(--text-primary);
-  margin: 0 0 var(--spacing-xs) 0;
 }
 
-.questionPoints {
-  font-size: var(--font-size-sm);
-  color: var(--primary-color);
-  font-weight: 600;
-  background: rgba(25, 118, 210, 0.1);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-sm);
-}
-
-.flagButton {
-  transition: var(--transition-fast);
-}
-
-.flagButton.flagged {
-  background: rgba(255, 152, 0, 0.1);
-  color: var(--warning-color);
-  border-color: var(--warning-color);
-}
-
-.questionContent {
-  flex: 1;
-  margin-bottom: var(--spacing-xl);
-}
-
-.questionText {
-  font-size: var(--font-size-lg);
-  color: var(--text-primary);
+.instructions p {
+  margin-bottom: var(--spacing-md);
+  color: var(--text-secondary);
   line-height: 1.6;
-  margin: 0 0 var(--spacing-xl) 0;
 }
 
-.answerOptions {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+.instructions ul {
+  margin: 0;
+  padding-left: var(--spacing-lg);
+  color: var(--text-secondary);
 }
 
-.optionLabel {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: var(--transition-fast);
-  background: var(--bg-secondary);
+.instructions li {
+  margin-bottom: var(--spacing-xs);
 }
 
-.optionLabel:hover {
-  border-color: var(--primary-color);
-  background: rgba(25, 118, 210, 0.05);
+.questionsContainer {
+  margin-bottom: var(--spacing-lg);
 }
 
-.optionCheckbox {
-  width: 20px;
-  height: 20px;
-  margin-top: 2px;
-  accent-color: var(--primary-color);
-  cursor: pointer;
+.questionCard {
+  margin-bottom: var(--spacing-lg);
 }
 
-.optionText {
-  flex: 1;
-  font-size: var(--font-size-md);
-  line-height: 1.5;
+.placeholder {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  color: var(--text-secondary);
+}
+
+.placeholder h3 {
+  margin: 0 0 var(--spacing-md) 0;
   color: var(--text-primary);
 }
 
-.questionNavButtons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: var(--spacing-lg);
+.footer {
+  position: sticky;
+  bottom: 0;
+  background-color: var(--bg-paper);
   border-top: 1px solid var(--border-color);
-}
-
-.submitModal {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xl);
-}
-
-.submitSummary h3 {
-  color: var(--text-primary);
-  margin: 0 0 var(--spacing-lg) 0;
-}
-
-.summaryStats {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.summaryItem {
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-2);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.summaryLabel {
+.progress {
   color: var(--text-secondary);
+  font-size: var(--font-size-sm);
 }
 
-.summaryValue {
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.submitWarning {
+.actions {
   display: flex;
-  align-items: flex-start;
   gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  background: rgba(255, 152, 0, 0.1);
-  border: 1px solid var(--warning-color);
-  border-radius: var(--radius-md);
-  color: var(--warning-color);
 }
 
-.warningIcon {
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: var(--error-color);
   font-size: var(--font-size-lg);
-  margin-top: 2px;
-}
-
-.submitWarning p {
-  margin: 0;
-  line-height: 1.5;
-}
-
-.submitActions {
-  display: flex;
-  gap: var(--spacing-md);
-  justify-content: flex-end;
-}
-
-.warningModal {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-lg);
-  text-align: center;
-}
-
-.warningModal .warningIcon {
-  font-size: 3rem;
-  color: var(--warning-color);
-}
-
-.warningModal p {
-  margin: 0;
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-.warningActions {
-  display: flex;
-  justify-content: center;
-}
-
-.notFound {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
-  text-align: center;
-  gap: var(--spacing-lg);
-}
-
-.notFound h2 {
-  font-size: var(--font-size-xl);
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.notFound p {
-  color: var(--text-secondary);
-  margin: 0;
 }
 
 @media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-md);
+  }
+  
   .header {
     flex-direction: column;
-    align-items: stretch;
+    gap: var(--spacing-md);
+    text-align: center;
+  }
+  
+  .footer {
+    flex-direction: column;
     gap: var(--spacing-md);
   }
   
-  .examStats {
-    justify-content: center;
-    gap: var(--spacing-lg);
-  }
-  
-  .examBody {
-    flex-direction: column;
-  }
-  
-  .questionNavigation {
+  .actions {
     width: 100%;
-    position: static;
+    justify-content: stretch;
   }
   
-  .questionGrid {
-    grid-template-columns: repeat(8, 1fr);
-  }
-  
-  .legend {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .questionNavButtons {
-    flex-direction: column;
-    gap: var(--spacing-md);
-  }
-  
-  .submitActions {
-    flex-direction: column;
+  .actions button {
+    flex: 1;
   }
 }
