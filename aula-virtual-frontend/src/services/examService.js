@@ -1,111 +1,135 @@
 import api from './api';
 
-export const examService = {
-  // Get all exams with filters
-  getAllExams: (params = {}) => {
-    return api.get('/exams', { params });
+const examService = {
+  // Obtener todos los exámenes
+  getExams: async (params = {}) => {
+    try {
+      const response = await api.get('/exams', { params });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get exam by ID
-  getExamById: (id) => {
-    return api.get(`/exams/${id}`);
+  // Obtener examen por ID
+  getExamById: async (id) => {
+    try {
+      const response = await api.get(`/exams/${id}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Create new exam
-  createExam: (examData) => {
-    return api.post('/exams', examData);
+  // Crear examen
+  createExam: async (examData) => {
+    try {
+      const response = await api.post('/exams', examData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Update exam
-  updateExam: (id, examData) => {
-    return api.put(`/exams/${id}`, examData);
+  // Actualizar examen
+  updateExam: async (id, examData) => {
+    try {
+      const response = await api.put(`/exams/${id}`, examData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Delete exam
-  deleteExam: (id) => {
-    return api.delete(`/exams/${id}`);
+  // Eliminar examen
+  deleteExam: async (id) => {
+    try {
+      const response = await api.delete(`/exams/${id}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get exams for student
-  getStudentExams: (studentId, params = {}) => {
-    return api.get(`/exams/student/${studentId}`, { params });
+  // Obtener exámenes por curso
+  getExamsByCourse: async (courseId) => {
+    try {
+      const response = await api.get(`/exams/course/${courseId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get exams for instructor
-  getInstructorExams: (instructorId, params = {}) => {
-    return api.get(`/exams/instructor/${instructorId}`, { params });
+  // Iniciar examen
+  startExam: async (examId) => {
+    try {
+      const response = await api.post(`/exams/${examId}/start`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get student's courses
-  getStudentCourses: (studentId) => {
-    return api.get(`/users/${studentId}/courses`);
+  // Finalizar examen
+  finishExam: async (examId, answers) => {
+    try {
+      const response = await api.post(`/exams/${examId}/finish`, { answers });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get instructor's courses
-  getInstructorCourses: (instructorId) => {
-    return api.get(`/users/${instructorId}/courses`);
+  // Obtener calificaciones del examen
+  getExamGrades: async (examId) => {
+    try {
+      const response = await api.get(`/exams/${examId}/grades`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Start exam attempt
-  startExamAttempt: (examId) => {
-    return api.post(`/exams/${examId}/attempts`);
+  // Calificar examen
+  gradeExam: async (examId, studentId, gradeData) => {
+    try {
+      const response = await api.post(`/exams/${examId}/grades/${studentId}`, gradeData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Save exam answers (auto-save)
-  saveExamAnswers: (attemptId, answersData) => {
-    return api.put(`/exam-attempts/${attemptId}/answers`, answersData);
+  // Obtener calificación del estudiante
+  getStudentGrade: async (examId, studentId) => {
+    try {
+      const response = await api.get(`/exams/${examId}/grades/${studentId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Submit exam attempt
-  submitExamAttempt: (attemptId, submissionData) => {
-    return api.put(`/exam-attempts/${attemptId}/submit`, submissionData);
+  // Obtener exámenes del estudiante
+  getStudentExams: async (studentId) => {
+    try {
+      const response = await api.get(`/exams/student/${studentId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get exam attempt by ID
-  getExamAttempt: (attemptId) => {
-    return api.get(`/exam-attempts/${attemptId}`);
-  },
-
-  // Get exam with grades
-  getExamWithGrades: (examId) => {
-    return api.get(`/exams/${examId}/grades`);
-  },
-
-  // Adjust exam grade
-  adjustExamGrade: (attemptId, gradeData) => {
-    return api.put(`/exam-attempts/${attemptId}/grade`, gradeData);
-  },
-
-  // Export exam grades
-  exportExamGrades: (examId, format = 'xlsx') => {
-    return api.get(`/exams/${examId}/export-grades`, {
-      params: { format },
-      responseType: 'blob'
-    });
-  },
-
-  // Get exam statistics
-  getExamStatistics: (examId) => {
-    return api.get(`/exams/${examId}/statistics`);
-  },
-
-  // Get exam results for student
-  getStudentExamResults: (examId, studentId) => {
-    return api.get(`/exams/${examId}/results/${studentId}`);
-  },
-
-  // Get all exam attempts
-  getExamAttempts: (examId) => {
-    return api.get(`/exams/${examId}/attempts`);
-  },
-
-  // Reset exam attempt
-  resetExamAttempt: (attemptId) => {
-    return api.post(`/exam-attempts/${attemptId}/reset`);
-  },
-
-  // Extend exam time
-  extendExamTime: (attemptId, additionalMinutes) => {
-    return api.post(`/exam-attempts/${attemptId}/extend`, { additionalMinutes });
+  // Obtener estado del examen para estudiante
+  getExamStatus: async (examId, studentId) => {
+    try {
+      const response = await api.get(`/exams/${examId}/status/${studentId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 };
+
+export default examService;
