@@ -1,0 +1,245 @@
+/* Responsive design utilities */
+
+/* Mobile First - Base styles for mobile */
+.container {
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+  
+  .grid-cols-sm-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  
+  .grid-cols-sm-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  
+  .text-sm-left {
+    text-align: left;
+  }
+  
+  .text-sm-center {
+    text-align: center;
+  }
+  
+  .text-sm-right {
+    text-align: right;
+  }
+  
+  .d-sm-block {
+    display: block;
+  }
+  
+  .d-sm-none {
+    display: none;
+  }
+  
+  .d-sm-flex {
+    display: flex;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+  
+  .grid-cols-md-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  
+  .grid-cols-md-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  
+  .grid-cols-md-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  
+  .text-md-left {
+    text-align: left;
+  }
+  
+  .text-md-center {
+    text-align: center;
+  }
+  
+  .text-md-right {
+    text-align: right;
+  }
+  
+  .d-md-block {
+    display: block;
+  }
+  
+  .d-md-none {
+    display: none;
+  }
+  
+  .d-md-flex {
+    display: flex;
+  }
+  
+  .flex-md-row {
+    flex-direction: row;
+  }
+  
+  .flex-md-column {
+    flex-direction: column;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+  
+  .grid-cols-lg-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  
+  .grid-cols-lg-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  
+  .grid-cols-lg-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  
+  .grid-cols-lg-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  
+  .text-lg-left {
+    text-align: left;
+  }
+  
+  .text-lg-center {
+    text-align: center;
+  }
+  
+  .text-lg-right {
+    text-align: right;
+  }
+  
+  .d-lg-block {
+    display: block;
+  }
+  
+  .d-lg-none {
+    display: none;
+  }
+  
+  .d-lg-flex {
+    display: flex;
+  }
+  
+  .flex-lg-row {
+    flex-direction: row;
+  }
+  
+  .flex-lg-column {
+    flex-direction: column;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+  
+  .grid-cols-xl-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  
+  .grid-cols-xl-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  
+  .grid-cols-xl-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  
+  .grid-cols-xl-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  
+  .grid-cols-xl-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  
+  .text-xl-left {
+    text-align: left;
+  }
+  
+  .text-xl-center {
+    text-align: center;
+  }
+  
+  .text-xl-right {
+    text-align: right;
+  }
+  
+  .d-xl-block {
+    display: block;
+  }
+  
+  .d-xl-none {
+    display: none;
+  }
+  
+  .d-xl-flex {
+    display: flex;
+  }
+  
+  .flex-xl-row {
+    flex-direction: row;
+  }
+  
+  .flex-xl-column {
+    flex-direction: column;
+  }
+}
+
+/* Extra extra large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+  
+  .grid-cols-2xl-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  
+  .grid-cols-2xl-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  
+  .grid-cols-2xl-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  
+  .grid-cols-2xl-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  
+  .grid-cols-2xl-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  
+  .grid-cols-2xl-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
