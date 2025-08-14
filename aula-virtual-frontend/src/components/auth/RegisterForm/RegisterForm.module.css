@@ -1,109 +1,22 @@
 .form {
-  width: 100%;
-  max-width: 700px;
-  padding: var(--spacing-xl);
-  background: var(--bg-primary);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-}
-
-.header {
-  text-align: center;
-  margin-bottom: var(--spacing-xl);
-}
-
-.title {
-  font-size: var(--font-size-xxl);
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 var(--spacing-sm) 0;
-}
-
-.subtitle {
-  font-size: var(--font-size-md);
-  color: var(--text-secondary);
-  margin: 0;
-}
-
-.formGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-lg);
-}
-
-.formGroup {
-  margin-bottom: 0;
-}
-
-.terms {
-  margin-bottom: var(--spacing-xl);
-}
-
-.termsLabel {
   display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-sm);
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-  cursor: pointer;
-  line-height: 1.5;
+  flex-direction: column;
+  gap: var(--spacing-md);
 }
 
-.termsLabel input {
-  margin: 0;
-  margin-top: 2px;
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
 }
 
-.termsLink {
-  color: var(--primary-color);
-  text-decoration: none;
-  transition: var(--transition-fast);
-}
-
-.termsLink:hover {
-  color: var(--primary-dark);
-  text-decoration: underline;
-}
-
-.footer {
-  text-align: center;
-  margin-top: var(--spacing-xl);
-  padding-top: var(--spacing-lg);
-  border-top: 1px solid var(--border-color);
-}
-
-.footer p {
-  margin: 0;
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-}
-
-.loginLink {
-  color: var(--primary-color);
-  text-decoration: none;
-  font-weight: 500;
-  transition: var(--transition-fast);
-}
-
-.loginLink:hover {
-  color: var(--primary-dark);
-  text-decoration: underline;
+.submitButton {
+  margin-top: var(--spacing-md);
+  width: 100%;
 }
 
 @media (max-width: 768px) {
-  .form {
-    padding: var(--spacing-lg);
-  }
-  
-  .formGrid {
+  .row {
     grid-template-columns: 1fr;
-    gap: var(--spacing-md);
-  }
-}
-
-@media (max-width: 480px) {
-  .formGrid {
-    gap: var(--spacing-sm);
   }
 }
