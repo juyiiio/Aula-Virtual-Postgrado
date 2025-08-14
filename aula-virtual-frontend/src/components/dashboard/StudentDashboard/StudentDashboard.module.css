@@ -1,285 +1,191 @@
 .dashboard {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xl);
+  padding: var(--spacing-lg);
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--spacing-lg);
-}
-
-.headerContent {
-  flex: 1;
+  margin-bottom: var(--spacing-xl);
 }
 
 .title {
-  font-size: var(--font-size-xxl);
-  font-weight: 700;
+  margin: 0 0 var(--spacing-xs) 0;
   color: var(--text-primary);
-  margin: 0 0 var(--spacing-sm) 0;
+  font-size: var(--font-size-3xl);
+  font-weight: 600;
 }
 
 .subtitle {
-  font-size: var(--font-size-lg);
-  color: var(--text-secondary);
   margin: 0;
-}
-
-.headerActions {
-  display: flex;
-  gap: var(--spacing-md);
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
 }
 
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
 }
 
-.contentGrid {
+.content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
 }
 
-.coursesCard,
-.assignmentsCard,
-.examsCard {
-  min-height: 400px;
+.section {
+  display: flex;
+  flex-direction: column;
 }
 
-.coursesList,
-.assignmentsList,
-.examsList {
+.courses {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
 }
 
-.courseItem,
-.assignmentItem,
-.examItem {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
+.course {
   padding: var(--spacing-md);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  transition: var(--transition-fast);
+  border-radius: var(--border-radius-md);
+  background-color: var(--bg-secondary);
+  transition: var(--transition-base);
 }
 
-.courseItem:hover,
-.assignmentItem:hover,
-.examItem:hover {
-  background: var(--bg-secondary);
-  border-color: var(--primary-color);
+.course:hover {
+  box-shadow: var(--shadow-1);
 }
 
-.courseInfo,
-.assignmentInfo,
-.examInfo {
-  flex: 1;
-}
-
-.courseName,
-.assignmentTitle,
-.examTitle {
-  font-size: var(--font-size-md);
-  font-weight: 600;
-  color: var(--text-primary);
+.courseTitle {
   margin: 0 0 var(--spacing-xs) 0;
 }
 
-.courseCode,
-.assignmentCourse,
-.examCourse {
-  font-size: var(--font-size-sm);
+.courseLink {
   color: var(--primary-color);
-  font-weight: 500;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.courseLink:hover {
+  text-decoration: underline;
+}
+
+.courseCode {
   margin: 0 0 var(--spacing-xs) 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
 }
 
 .courseInstructor {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
   margin: 0;
-}
-
-.courseProgress {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  min-width: 100px;
-}
-
-.progressBar {
-  flex: 1;
-  height: 8px;
-  background: var(--bg-secondary);
-  border-radius: var(--radius-full);
-  overflow: hidden;
-}
-
-.progressFill {
-  height: 100%;
-  background: var(--success-color);
-  transition: width var(--transition-normal);
-}
-
-.progressText {
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  color: var(--text-secondary);
-  min-width: 35px;
-}
-
-.assignmentMeta,
-.examMeta {
-  display: flex;
-  gap: var(--spacing-md);
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-}
-
-.assignmentPoints {
-  color: var(--primary-color);
-  font-weight: 500;
-}
-
-.examType {
-  display: flex;
-  align-items: center;
-}
-
-.examBadge {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-sm);
+  color: var(--text-hint);
   font-size: var(--font-size-xs);
-  font-weight: 600;
-  text-transform: uppercase;
 }
 
-.examBadge.parcial {
-  background: rgba(255, 152, 0, 0.1);
-  color: var(--warning-color);
-}
-
-.examBadge.final {
-  background: rgba(244, 67, 54, 0.1);
-  color: var(--danger-color);
-}
-
-.examBadge.sustitutorio {
-  background: rgba(33, 150, 243, 0.1);
-  color: var(--info-color);
-}
-
-.emptyState {
-  text-align: center;
-  padding: var(--spacing-xl);
-  color: var(--text-secondary);
-}
-
-.emptyState p {
-  margin: 0;
-}
-
-.recentActivity {
-  margin-top: var(--spacing-lg);
-}
-
-.activityList {
+.tasks {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
 }
 
-.activityItem {
+.task {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  border-radius: var(--radius-sm);
-  transition: var(--transition-fast);
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--bg-secondary);
 }
 
-.activityItem:hover {
-  background: var(--bg-secondary);
+.taskType {
+  font-size: var(--font-size-lg);
 }
 
-.activityIcon {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
-  background: var(--primary-color);
-  color: var(--text-white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--font-size-md);
-}
-
-.activityContent {
+.taskInfo {
   flex: 1;
 }
 
-.activityTitle {
-  font-weight: 500;
+.taskTitle {
+  margin: 0 0 0.25rem 0;
   color: var(--text-primary);
-  margin: 0 0 var(--spacing-xs) 0;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
 }
 
-.activityTime {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
+.taskDate {
   margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.announcementsSection {
+  margin-bottom: var(--spacing-lg);
+}
+
+.announcements {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.announcement {
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  background-color: var(--bg-secondary);
+}
+
+.announcementTitle {
+  margin: 0 0 var(--spacing-xs) 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+}
+
+.announcementContent {
+  margin: 0 0 var(--spacing-xs) 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.announcementDate {
+  color: var(--text-hint);
+  font-size: var(--font-size-xs);
+}
+
+.quickActions {
+  width: 100%;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.noData {
+  color: var(--text-secondary);
+  text-align: center;
+  padding: var(--spacing-lg);
 }
 
 @media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: stretch;
+  .dashboard {
+    padding: var(--spacing-md);
   }
   
-  .headerActions {
-    justify-content: stretch;
-  }
-  
-  .headerActions button {
-    flex: 1;
-  }
-  
-  .statsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .contentGrid {
+  .content {
     grid-template-columns: 1fr;
   }
   
-  .courseItem {
-    flex-direction: column;
-    align-items: stretch;
+  .statsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--spacing-md);
   }
   
-  .courseProgress {
-    order: -1;
-    min-width: auto;
-  }
-}
-
-@media (max-width: 480px) {
-  .statsGrid {
-    grid-template-columns: 1fr;
-  }
-  
-  .assignmentMeta,
-  .examMeta {
-    flex-direction: column;
-    gap: var(--spacing-xs);
+  .actions {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   }
 }
