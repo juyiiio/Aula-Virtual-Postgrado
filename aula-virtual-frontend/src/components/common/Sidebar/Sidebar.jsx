@@ -1,68 +1,98 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { 
-  FaTachometerAlt, 
-  FaBook, 
-  FaTasks, 
-  FaClipboardCheck, 
-  FaComments, 
-  FaCalendarAlt, 
-  FaVideo, 
-  FaUsers, 
-  FaBullhorn,
-  FaFolder,
-  FaChartBar
-} from 'react-icons/fa';
+import { Link, useLocation } from 'react-router-dom';
+import useAuth from '../../../hooks/useAuth';
 import styles from './Sidebar.module.css';
 
-const Sidebar = ({ isOpen, userRole }) => {
-  const getMenuItems = () => {
-    const commonItems = [
-      { path: '/dashboard', icon: FaTachometerAlt, label: 'Dashboard' },
-      { path: '/courses', icon: FaBook, label: 'Mis Cursos' },
-      { path: '/assignments', icon: FaTasks, label: 'Tareas' },
-      { path: '/exams', icon: FaClipboardCheck, label: 'Exámenes' },
-      { path: '/forums', icon: FaComments, label: 'Foros' },
-      { path: '/calendar', icon: FaCalendarAlt, label: 'Calendario' },
-      { path: '/conferences', icon: FaVideo, label: 'Videoconferencias' },
-      { path: '/announcements', icon: FaBullhorn, label: 'Anuncios' },
-      { path: '/resources', icon: FaFolder, label: 'Recursos' }
-    ];
+const Sidebar = () => {
+  const { user, hasRole } = useAuth();
+  const location = useLocation();
 
-    const adminItems = [
-      { path: '/users', icon: FaUsers, label: 'Gestión de Usuarios' },
-      { path: '/reports', icon: FaChartBar, label: 'Reportes' }
-    ];
-
-    if (userRole === 'ADMIN' || userRole === 'COORDINATOR') {
-      return [...commonItems, ...adminItems];
-    }
-
-    return commonItems;
+  const isActive = (path) => {
+    return location.pathname === path || location.pathname.startsWith(path + '/');
   };
 
-  const menuItems = getMenuItems();
+  const menuItems = [
+    {
+      path: '/dashboard',
+      label: 'Dashboard',
+      icon: '📊',
+      roles: ['ADMIN', 'INSTRUCTOR', 'STUDENT']
+    },
+    {
+      path: '/courses',
+      label: 'Cursos',
+      icon: '📚',
+      roles: ['ADMIN', 'INSTRUCTOR', 'STUDENT']
+    },
+    {
+      path: '/assignments',
+      label: 'Tareas',
+      icon: '📝',
+      roles: ['INSTRUCTOR', 'STUDENT']
+    },
+    {
+      path: '/exams',
+      label: 'Exámenes',
+      icon: '📋',
+      roles: ['INSTRUCTOR', 'STUDENT']
+    },
+    {
+      path: '/forums',
+      label: 'Foros',
+      icon: '💬',
+      roles: ['ADMIN', 'INSTRUCTOR', 'STUDENT']
+    },
+    {
+      path: '/calendar',
+      label: 'Calendario',
+      icon: '📅',
+      roles: ['ADMIN', 'INSTRUCTOR', 'STUDENT']
+    },
+    {
+      path: '/videoconference',
+      label: 'Videoconferencias',
+      icon: '🎥',
+      roles: ['INSTRUCTOR', 'STUDENT']
+    },
+    {
+      path: '/users',
+      label: 'Usuarios',
+      icon: '👥',
+      roles: ['ADMIN']
+    },
+    {
+      path: '/announcements',
+      label: 'Anuncios',
+      icon: '📢',
+      roles: ['ADMIN', 'INSTRUCTOR', 'STUDENT']
+    },
+    {
+      path: '/resources',
+      label: 'Recursos',
+      icon: '📁',
+      roles: ['ADMIN', 'INSTRUCTOR', 'STUDENT']
+    }
+  ];
+
+  const visibleItems = menuItems.filter(item => 
+    item.roles.some(role => hasRole(role))
+  );
 
   return (
-    <aside className={`${styles.sidebar} ${!isOpen ? styles.sidebarClosed : ''}`}>
+    <aside className={styles.sidebar}>
       <nav className={styles.nav}>
-        <ul className={styles.navList}>
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <li key={item.path} className={styles.navItem}>
-                <NavLink
-                  to={item.path}
-                  className={({ isActive }) =>
-                    `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`
-                  }
-                >
-                  <Icon className={styles.navIcon} />
-                  <span className={styles.navLabel}>{item.label}</span>
-                </NavLink>
-              </li>
-            );
-          })}
+        <ul className={styles.menuList}>
+          {visibleItems.map(item => (
+            <li key={item.path} className={styles.menuItem}>
+              <Link 
+                to={item.path} 
+                className={`${styles.menuLink} ${isActive(item.path) ? styles.active : ''}`}
+              >
+                <span className={styles.icon}>{item.icon}</span>
+                <span className={styles.label}>{item.label}</span>
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
     </aside>
