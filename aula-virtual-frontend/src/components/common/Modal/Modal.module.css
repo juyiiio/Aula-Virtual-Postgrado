@@ -1,111 +1,103 @@
-.backdrop {
+.overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
-  padding: var(--spacing-md);
+  z-index: var(--z-modal);
+  padding: 1rem;
 }
 
 .modal {
-  background: var(--bg-primary);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+  background-color: var(--bg-paper);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-3);
   max-height: 90vh;
   overflow-y: auto;
-  animation: modalEnter 0.3s ease-out;
+  animation: modalSlideIn 0.3s ease-out;
 }
 
-@keyframes modalEnter {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-.small {
+.modal.small {
   width: 100%;
   max-width: 400px;
 }
 
-.medium {
+.modal.medium {
   width: 100%;
   max-width: 600px;
 }
 
-.large {
+.modal.large {
   width: 100%;
   max-width: 800px;
-}
-
-.extraLarge {
-  width: 100%;
-  max-width: 1000px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-lg);
+  padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border-color);
 }
 
 .title {
   margin: 0;
-  font-size: var(--font-size-xl);
-  font-weight: 600;
   color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
 }
 
 .closeButton {
   background: none;
   border: none;
-  font-size: var(--font-size-lg);
-  color: var(--text-secondary);
+  font-size: 1.5rem;
   cursor: pointer;
-  padding: var(--spacing-sm);
-  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-sm);
   transition: var(--transition-fast);
 }
 
 .closeButton:hover {
-  background: var(--bg-secondary);
+  background-color: var(--bg-secondary);
   color: var(--text-primary);
 }
 
-.closeButton:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.3);
+.content {
+  padding: 1.5rem;
 }
 
-.content {
-  padding: var(--spacing-lg);
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 768px) {
-  .backdrop {
-    padding: var(--spacing-sm);
-  }
-  
   .modal {
-    max-height: 95vh;
+    margin: 0.5rem;
+    max-height: calc(100vh - 1rem);
   }
   
-  .small,
-  .medium,
-  .large,
-  .extraLarge {
-    width: 100%;
-    max-width: none;
+  .header {
+    padding: 1rem;
+  }
+  
+  .content {
+    padding: 1rem;
   }
 }
