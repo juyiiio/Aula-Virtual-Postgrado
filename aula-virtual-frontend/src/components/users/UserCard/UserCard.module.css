@@ -1,0 +1,371 @@
+.card {
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  transition: var(--transition-normal);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--primary-color);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.userAvatar {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarInitials {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text-white);
+}
+
+.roleIconOverlay {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--bg-primary);
+  border: 2px solid var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+}
+
+.roleIconAdmin {
+  color: var(--danger-color);
+}
+
+.roleIconInstructor {
+  color: var(--warning-color);
+}
+
+.roleIconStudent {
+  color: var(--info-color);
+}
+
+.roleIconDefault {
+  color: var(--text-secondary);
+}
+
+.userInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.userName {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.currentUserIcon {
+  color: var(--warning-color);
+  font-size: var(--font-size-sm);
+}
+
+.userMeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.userCode {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-family: 'Courier New', monospace;
+}
+
+.badges {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.roleBadge,
+.statusBadge {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.roleAdmin {
+  background: rgba(244, 67, 54, 0.1);
+  color: var(--danger-color);
+}
+
+.roleInstructor {
+  background: rgba(255, 152, 0, 0.1);
+  color: var(--warning-color);
+}
+
+.roleStudent {
+  background: rgba(33, 150, 243, 0.1);
+  color: var(--info-color);
+}
+
+.statusActive {
+  background: rgba(76, 175, 80, 0.1);
+  color: var(--success-color);
+}
+
+.statusInactive {
+  background: rgba(158, 158, 158, 0.1);
+  color: var(--text-secondary);
+}
+
+.statusPending {
+  background: rgba(255, 152, 0, 0.1);
+  color: var(--warning-color);
+}
+
+.statusSuspended {
+  background: rgba(244, 67, 54, 0.1);
+  color: var(--danger-color);
+}
+
+.cardContent {
+  flex: 1;
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.contactIcon {
+  color: var(--primary-color);
+  font-size: var(--font-size-sm);
+  width: 16px;
+  flex-shrink: 0;
+}
+
+.contactText {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  word-break: break-word;
+}
+
+.userBio {
+  padding: var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.userBio p {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.userStats {
+  display: flex;
+  justify-content: space-around;
+  padding: var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  gap: var(--spacing-md);
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.statValue {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.lastLogin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+}
+
+.lastLoginLabel {
+  color: var(--text-secondary);
+}
+
+.lastLoginTime {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.cardFooter {
+  padding: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+.deleteModal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.deleteWarning {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid var(--danger-color);
+  border-radius: var(--radius-md);
+}
+
+.warningIcon {
+  color: var(--danger-color);
+  font-size: var(--font-size-lg);
+}
+
+.deleteWarning h3 {
+  color: var(--danger-color);
+  margin: 0;
+}
+
+.deleteModal p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.deleteInfo {
+  padding: var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+}
+
+.deleteInfo strong {
+  color: var(--text-primary);
+}
+
+.deleteInfo ul {
+  margin: var(--spacing-sm) 0 0 0;
+  padding-left: var(--spacing-lg);
+}
+
+.deleteInfo li {
+  margin-bottom: var(--spacing-xs);
+  color: var(--text-secondary);
+}
+
+.deleteActions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  .cardHeader {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .userStats {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .statItem {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .lastLogin {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    text-align: center;
+  }
+  
+  .deleteActions {
+    flex-direction: column;
+  }
+}
