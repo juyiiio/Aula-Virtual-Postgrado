@@ -1,0 +1,330 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
+}
+
+.headerInfo {
+  flex: 1;
+}
+
+.title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.statsInfo {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.statIcon {
+  color: var(--primary-color);
+}
+
+.searchSection {
+  margin-bottom: var(--spacing-md);
+}
+
+.searchInput {
+  max-width: 400px;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xxl);
+  text-align: center;
+  gap: var(--spacing-lg);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 2px dashed var(--border-color);
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  color: var(--text-secondary);
+}
+
+.emptyState h4 {
+  font-size: var(--font-size-lg);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.emptyState p {
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 400px;
+}
+
+.studentsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.studentCard {
+  transition: var(--transition-normal);
+}
+
+.studentCard:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.studentHeader {
+  display: flex;
+  gap: var(--spacing-lg);
+  align-items: flex-start;
+  margin-bottom: var(--spacing-md);
+}
+
+.studentAvatar {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.studentAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarInitials {
+  color: var(--text-white);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+.studentInfo {
+  flex: 1;
+}
+
+.studentName {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.studentCode {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--primary-color);
+  margin: 0 0 var(--spacing-md) 0;
+  text-transform: uppercase;
+}
+
+.studentContact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.contactIcon {
+  font-size: var(--font-size-xs);
+}
+
+.studentMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-md);
+}
+
+.statusBadge {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.statusEnrolled {
+  background: rgba(76, 175, 80, 0.1);
+  color: var(--success-color);
+}
+
+.statusDropped {
+  background: rgba(244, 67, 54, 0.1);
+  color: var(--danger-color);
+}
+
+.statusCompleted {
+  background: rgba(33, 150, 243, 0.1);
+  color: var(--info-color);
+}
+
+.enrollmentInfo {
+  text-align: right;
+}
+
+.enrollmentDate,
+.finalGrade {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.studentActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.enrollModal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.modalSearch {
+  margin-bottom: var(--spacing-md);
+}
+
+.availableStudentsList {
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.availableStudent {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+}
+
+.availableStudent:hover {
+  background: var(--bg-secondary);
+  border-color: var(--primary-color);
+}
+
+.availableStudent .studentAvatar {
+  width: 50px;
+  height: 50px;
+}
+
+.availableStudent .studentInfo {
+  flex: 1;
+}
+
+.availableStudent .studentName {
+  font-size: var(--font-size-md);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.studentEmail {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.noStudents {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--text-secondary);
+}
+
+.unenrollConfirmation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  text-align: center;
+}
+
+.unenrollConfirmation p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.unenrollWarning {
+  color: var(--danger-color);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-lg);
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .studentHeader {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .studentMeta {
+    align-items: flex-start;
+  }
+  
+  .enrollmentInfo {
+    text-align: left;
+  }
+  
+  .studentActions {
+    justify-content: flex-start;
+  }
+  
+  .availableStudent {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .modalActions {
+    flex-direction: column;
+  }
+}
