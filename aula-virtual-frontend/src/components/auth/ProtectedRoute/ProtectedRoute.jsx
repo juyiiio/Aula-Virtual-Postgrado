@@ -1,1 +1,32 @@
-import React from 'react';import { Navigate, useLocation } from 'react-router-dom';import { useAuth } from '../../../context/AuthContext';import Loading from '../../common/Loading/Loading';const ProtectedRoute = ({ children, requiredRoles = [] }) => {  const { isAuthenticated, isLoading, hasRole } = useAuth();  const location = useLocation();  if (isLoading) {    return <Loading overlay text="Verificando autenticación..." />;  }  if (!isAuthenticated) {    return <Navigate to="/login" state={{ from: location }} replace />;  }  if (requiredRoles.length > 0 && !hasRole(requiredRoles)) {    return (      <div style={{         display: 'flex',         justifyContent: 'center',         alignItems: 'center',         height: '50vh',        flexDirection: 'column',        gap: '1rem'      }}>        <h2>Acceso Denegado</h2>        <p>No tienes permisos para acceder a esta página.</p>      </div>    );  }  return children;};export default ProtectedRoute;
+import React from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import useAuth from '../../../hooks/useAuth';
+import Loading from '../../common/Loading/Loading';
+import Layout from '../../common/Layout/Layout';
+
+const ProtectedRoute = ({ children, roles = [] }) => {
+  const { user, isAuthenticated, loading } = useAuth();
+  const location = useLocation();
+
+  if (loading) {
+    return <Loading message="Verificando autenticaciÃ³n..." />;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (roles.length > 0 && user) {
+    const hasRequiredRole = roles.some(role => 
+      user.roles?.some(userRole => userRole.name === role)
+    );
+
+    if (!hasRequiredRole) {
+      return <Navigate to="/dashboard" replace />;
+    }
+  }
+
+  return <Layout>{children}</Layout>;
+};
+
+export default ProtectedRoute;
