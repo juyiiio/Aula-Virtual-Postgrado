@@ -1,150 +1,100 @@
 .dashboard {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xl);
+  padding: var(--spacing-lg);
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--spacing-lg);
-}
-
-.headerContent {
-  flex: 1;
+  margin-bottom: var(--spacing-xl);
 }
 
 .title {
-  font-size: var(--font-size-xxl);
-  font-weight: 700;
+  margin: 0 0 var(--spacing-xs) 0;
   color: var(--text-primary);
-  margin: 0 0 var(--spacing-sm) 0;
+  font-size: var(--font-size-3xl);
+  font-weight: 600;
 }
 
 .subtitle {
-  font-size: var(--font-size-lg);
-  color: var(--text-secondary);
   margin: 0;
-}
-
-.headerActions {
-  display: flex;
-  gap: var(--spacing-md);
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
 }
 
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
 }
 
-.contentGrid {
+.content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: 2fr 1fr;
   gap: var(--spacing-lg);
 }
 
-.managementCard {
-  transition: var(--transition-normal);
-}
-
-.managementCard:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.cardContent {
+.section {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
 }
 
-.cardDescription {
-  color: var(--text-secondary);
-  margin: 0;
-  line-height: 1.6;
-}
-
-.cardActions {
-  display: flex;
-  gap: var(--spacing-sm);
-}
-
-.recentActivity {
-  margin-top: var(--spacing-lg);
-}
-
-.activityList {
+.announcements {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
 }
 
-.activityItem {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
+.announcement {
   padding: var(--spacing-md);
-  border-radius: var(--radius-sm);
-  transition: var(--transition-fast);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  background-color: var(--bg-secondary);
 }
 
-.activityItem:hover {
-  background: var(--bg-secondary);
-}
-
-.activityIcon {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
-  background: var(--primary-color);
-  color: var(--text-white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--font-size-md);
-}
-
-.activityContent {
-  flex: 1;
-}
-
-.activityTitle {
-  font-weight: 500;
-  color: var(--text-primary);
+.announcementTitle {
   margin: 0 0 var(--spacing-xs) 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 600;
 }
 
-.activityTime {
-  font-size: var(--font-size-sm);
+.announcementContent {
+  margin: 0 0 var(--spacing-xs) 0;
   color: var(--text-secondary);
-  margin: 0;
+  font-size: var(--font-size-sm);
+}
+
+.announcementDate {
+  color: var(--text-hint);
+  font-size: var(--font-size-xs);
+}
+
+.quickActions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.noData {
+  color: var(--text-secondary);
+  text-align: center;
+  padding: var(--spacing-lg);
 }
 
 @media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: stretch;
+  .dashboard {
+    padding: var(--spacing-md);
   }
   
-  .headerActions {
-    justify-content: stretch;
-  }
-  
-  .headerActions button {
-    flex: 1;
+  .content {
+    grid-template-columns: 1fr;
   }
   
   .statsGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
   }
   
-  .contentGrid {
+  .quickActions {
     grid-template-columns: 1fr;
-  }
-  
-  .cardActions {
-    flex-direction: column;
   }
 }
