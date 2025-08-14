@@ -1,0 +1,183 @@
+.eventCard {
+  transition: var(--transition-base);
+}
+
+.eventCard.class {
+  border-left: 4px solid var(--success-color);
+}
+
+.eventCard.exam {
+  border-left: 4px solid var(--error-color);
+}
+
+.eventCard.assignment_due {
+  border-left: 4px solid var(--warning-color);
+}
+
+.eventCard.meeting {
+  border-left: 4px solid var(--info-color);
+}
+
+.eventCard.other {
+  border-left: 4px solid var(--primary-color);
+}
+
+.eventHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.eventMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.eventIcon {
+  font-size: var(--font-size-lg);
+}
+
+.eventType {
+  padding: 0.25rem 0.5rem;
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.eventTime {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.eventContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.eventTitle {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+.eventDescription {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.eventDetails {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+}
+
+.eventDetail {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.detailLabel {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  min-width: 80px;
+}
+
+.virtualBadge {
+  padding: 0.125rem 0.375rem;
+  background-color: var(--success-color);
+  color: white;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.meetingLink {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.meetingLink:hover {
+  text-decoration: underline;
+}
+
+/* Compact version */
+.eventCard.compact {
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--bg-secondary);
+  border: none;
+  border-left: 3px solid var(--primary-color);
+}
+
+.eventCard.compact.class {
+  border-left-color: var(--success-color);
+}
+
+.eventCard.compact.exam {
+  border-left-color: var(--error-color);
+}
+
+.eventCard.compact.assignment_due {
+  border-left-color: var(--warning-color);
+}
+
+.eventCard.compact.meeting {
+  border-left-color: var(--info-color);
+}
+
+.eventCard.compact .eventHeader {
+  margin-bottom: var(--spacing-xs);
+}
+
+.eventCard.compact .eventInfo {
+  flex: 1;
+}
+
+.eventCard.compact .eventTitle {
+  font-size: var(--font-size-sm);
+  margin: 0 0 0.125rem 0;
+}
+
+.eventCard.compact .eventTime {
+  font-size: var(--font-size-xs);
+  margin: 0;
+}
+
+.courseName {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+@media (max-width: 768px) {
+  .eventHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+  
+  .eventDetails {
+    gap: var(--spacing-sm);
+  }
+  
+  .eventDetail {
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+  
+  .detailLabel {
+    min-width: auto;
+  }
+}
