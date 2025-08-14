@@ -1,343 +1,138 @@
 .card {
-  background: var(--bg-primary);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color);
-  transition: var(--transition-normal);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+height: 100%;
+display: flex;
+flex-direction: column;
 }
 
-.card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-  border-color: var(--primary-color);
-}
-
-.cardHeader {
-  padding: var(--spacing-lg);
-  border-bottom: 1px solid var(--border-color);
+.header {
+display: flex;
+justify-content: space-between;
+align-items: flex-start;
+margin-bottom: var(--spacing-md);
 }
 
 .examInfo {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.statusSection {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-md);
-}
-
-.statusIcon {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-full);
-  background: var(--primary-color);
-  color: var(--text-white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--font-size-sm);
-}
-
-.badges {
-  display: flex;
-  gap: var(--spacing-sm);
-  flex-wrap: wrap;
-}
-
-.statusBadge,
-.typeBadge {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Status badges */
-.statusUpcoming {
-  background: rgba(255, 152, 0, 0.1);
-  color: var(--warning-color);
-}
-
-.statusAvailable {
-  background: rgba(76, 175, 80, 0.1);
-  color: var(--success-color);
-}
-
-.statusInProgress {
-  background: rgba(33, 150, 243, 0.1);
-  color: var(--info-color);
-}
-
-.statusCompleted {
-  background: rgba(76, 175, 80, 0.1);
-  color: var(--success-color);
-}
-
-.statusMissed {
-  background: rgba(244, 67, 54, 0.1);
-  color: var(--danger-color);
-}
-
-.statusDraft {
-  background: rgba(158, 158, 158, 0.1);
-  color: var(--text-secondary);
-}
-
-.statusScheduled {
-  background: rgba(33, 150, 243, 0.1);
-  color: var(--info-color);
-}
-
-.statusActive {
-  background: rgba(76, 175, 80, 0.1);
-  color: var(--success-color);
-}
-
-.statusInactive {
-  background: rgba(158, 158, 158, 0.1);
-  color: var(--text-secondary);
-}
-
-/* Type badges */
-.typeParcial {
-  background: rgba(33, 150, 243, 0.1);
-  color: var(--info-color);
-}
-
-.typeFinal {
-  background: rgba(244, 67, 54, 0.1);
-  color: var(--danger-color);
-}
-
-.typeSubstitutorio {
-  background: rgba(255, 152, 0, 0.1);
-  color: var(--warning-color);
-}
-
-.typeExtraordinario {
-  background: rgba(156, 39, 176, 0.1);
-  color: #9c27b0;
+flex: 1;
 }
 
 .examTitle {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-  line-height: 1.4;
+margin: 0 0 var(--spacing-xs) 0;
+color: var(--text-primary);
+font-size: var(--font-size-lg);
+font-weight: 600;
+line-height: 1.2;
+}
+
+.examType {
+margin: 0 0 var(--spacing-xs) 0;
+color: var(--text-secondary);
+font-size: var(--font-size-sm);
+font-weight: 500;
+text-transform: uppercase;
 }
 
 .courseName {
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  color: var(--primary-color);
-  margin: 0;
+margin: 0;
+color: var(--text-secondary);
+font-size: var(--font-size-sm);
 }
 
-.cardBody {
-  padding: var(--spacing-lg);
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+.statusContainer {
+display: flex;
+flex-direction: column;
+align-items: flex-end;
+gap: var(--spacing-xs);
 }
 
-.examDescription {
-  color: var(--text-secondary);
-  font-size: var(--font-size-md);
-  line-height: 1.6;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.status {
+padding: 0.25rem 0.5rem;
+border-radius: var(--border-radius-sm);
+font-size: var(--font-size-xs);
+font-weight: 600;
+text-transform: uppercase;
 }
 
-.examDetails {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
+.status.draft {
+background-color: var(--text-disabled);
+color: white;
 }
 
-.detailItem {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
+.status.active {
+background-color: var(--success-color);
+color: white;
 }
 
-.detailIcon {
-  color: var(--primary-color);
-  font-size: var(--font-size-sm);
-  min-width: 16px;
+.status.closed {
+background-color: var(--error-color);
+color: white;
 }
 
-.detailContent {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.studentStatus {
+padding: 0.25rem 0.5rem;
+border-radius: var(--border-radius-sm);
+font-size: var(--font-size-xs);
+font-weight: 600;
 }
 
-.detailLabel {
-  font-size: var(--font-size-xs);
-  color: var(--text-secondary);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.studentStatus.in_progress {
+background-color: var(--warning-color);
+color: white;
 }
 
-.detailValue {
-  font-size: var(--font-size-sm);
-  color: var(--text-primary);
-  font-weight: 500;
+.studentStatus.completed {
+background-color: var(--info-color);
+color: white;
 }
 
-.detailValue.upcoming {
-  color: var(--warning-color);
-  font-weight: 600;
+.studentStatus.graded {
+background-color: var(--success-color);
+color: white;
 }
 
-.attemptInfo {
-  margin-top: var(--spacing-md);
-  padding: var(--spacing-md);
-  background: var(--bg-secondary);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
+.content {
+flex: 1;
+margin-bottom: var(--spacing-md);
 }
 
-.attemptTitle {
-  font-size: var(--font-size-md);
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0 0 var(--spacing-sm) 0;
+.description {
+margin: 0 0 var(--spacing-md) 0;
+color: var(--text-secondary);
+font-size: var(--font-size-sm);
+line-height: 1.4;
+display: -webkit-box;
+-webkit-line-clamp: 3;
+-webkit-box-orient: vertical;
+overflow: hidden;
 }
 
-.attemptDetails {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
+.metadata {
+display: flex;
+flex-direction: column;
+gap: var(--spacing-xs);
 }
 
-.attemptDate,
-.attemptTime {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-  margin: 0;
+.metadataItem {
+display: flex;
+justify-content: space-between;
+align-items: center;
 }
 
-.attemptScore {
-  font-size: var(--font-size-sm);
-  color: var(--success-color);
-  font-weight: 600;
-  margin: 0;
+.label {
+color: var(--text-secondary);
+font-size: var(--font-size-xs);
+font-weight: 500;
 }
 
-.instructorInfo {
-  margin-top: auto;
+.dateTime {
+color: var(--text-primary);
+font-size: var(--font-size-xs);
+font-weight: 500;
 }
 
-.examStats {
-  display: flex;
-  justify-content: space-around;
-  padding: var(--spacing-md);
-  background: var(--bg-secondary);
-  border-radius: var(--radius-sm);
-  gap: var(--spacing-md);
-}
-
-.statItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.statValue {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--text-primary);
-  line-height: 1;
-}
-
-.statLabel {
-  font-size: var(--font-size-xs);
-  color: var(--text-secondary);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.cardFooter {
-  padding: var(--spacing-lg);
-  border-top: 1px solid var(--border-color);
-  background: var(--bg-secondary);
-}
-
-.actions {
-  display: flex;
-  gap: var(--spacing-xs);
-  flex-wrap: wrap;
-}
-
-.deleteModal {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
-}
-
-.deleteModal p {
-  margin: 0;
-  line-height: 1.6;
-}
-
-.deleteWarning {
-  color: var(--danger-color);
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-}
-
-.deleteActions {
-  display: flex;
-  gap: var(--spacing-md);
-  justify-content: flex-end;
-}
-
-@media (max-width: 768px) {
-  .statusSection {
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
-    gap: var(--spacing-sm);
-  }
-  
-  .badges {
-    justify-content: center;
-  }
-  
-  .actions {
-    flex-direction: column;
-  }
-  
-  .examStats {
-    flex-direction: column;
-    gap: var(--spacing-sm);
-  }
-  
-  .statItem {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  
-  .deleteActions {
-    flex-direction: column;
-  }
+.footer {
+display: flex;
+gap: var(--spacing-sm);
+margin-top: auto;
+padding-top: var(--spacing-md);
+border-top: 1px solid var(--border-color);
 }
