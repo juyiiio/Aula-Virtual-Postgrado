@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import useAuth from '../../../hooks/useAuth';
+import useNotification from '../../../hooks/useNotification';
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
-import { FaUser, FaLock } from 'react-icons/fa';
+import { validateEmail, validatePassword } from '../../../utils/validators';
 import styles from './LoginForm.module.css';
 
 const LoginForm = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { login, isLoading, error } = useAuth();
-  
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  const from = location.state?.from?.pathname || '/dashboard';
+  const { login } = useAuth();
+  const { showError, showSuccess } = useNotification();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,15 +36,13 @@ const LoginForm = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
-    if (!formData.username.trim()) {
-      newErrors.username = 'El usuario es requerido';
-    }
-    
-    if (!formData.password) {
-      newErrors.password = 'La contraseña es requerida';
-    }
-    
+
+    const emailError = validateEmail(formData.email);
+    if (emailError) newErrors.email = emailError;
+
+    const passwordError = validatePassword(formData.password);
+    if (passwordError) newErrors.password = passwordError;
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -53,88 +51,51 @@ const LoginForm = () => {
     e.preventDefault();
     
     if (!validateForm()) return;
-    
+
+    setLoading(true);
     try {
       await login(formData);
-      navigate(from, { replace: true });
+      showSuccess('Inicio de sesión exitoso');
+      navigate('/dashboard');
     } catch (error) {
-      console.error('Login error:', error);
+      const message = error?.response?.data?.message || 'Error en el inicio de sesión';
+      showError(message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Iniciar Sesión</h2>
-        <p className={styles.subtitle}>
-          Accede a tu aula virtual de postgrado
-        </p>
-      </div>
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <Input
+        label="Email"
+        type="email"
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        error={errors.email}
+        required
+        placeholder="Ingrese su email"
+      />
 
-      {error && (
-        <div className={styles.errorAlert}>
-          {error}
-        </div>
-      )}
-
-      <div className={styles.formGroup}>
-        <Input
-          label="Usuario"
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          placeholder="Ingresa tu usuario o email"
-          icon={<FaUser />}
-          error={errors.username}
-          required
-          fullWidth
-        />
-      </div>
-
-      <div className={styles.formGroup}>
-        <Input
-          label="Contraseña"
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Ingresa tu contraseña"
-          icon={<FaLock />}
-          error={errors.password}
-          required
-          fullWidth
-        />
-      </div>
-
-      <div className={styles.formOptions}>
-        <label className={styles.remember}>
-          <input type="checkbox" />
-          <span>Recordar sesión</span>
-        </label>
-        <a href="/forgot-password" className={styles.forgotPassword}>
-          ¿Olvidaste tu contraseña?
-        </a>
-      </div>
+      <Input
+        label="Contraseña"
+        type="password"
+        name="password"
+        value={formData.password}
+        onChange={handleChange}
+        error={errors.password}
+        required
+        placeholder="Ingrese su contraseña"
+      />
 
       <Button
         type="submit"
-        variant="primary"
-        size="large"
-        loading={isLoading}
-        fullWidth
+        loading={loading}
+        className={styles.submitButton}
       >
         Iniciar Sesión
       </Button>
-
-      <div className={styles.footer}>
-        <p>
-          ¿No tienes cuenta?{' '}
-          <a href="/register" className={styles.registerLink}>
-            Regístrate aquí
-          </a>
-        </p>
-      </div>
     </form>
   );
 };
