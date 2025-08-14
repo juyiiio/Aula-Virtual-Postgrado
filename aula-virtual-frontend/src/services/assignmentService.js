@@ -1,99 +1,153 @@
 import api from './api';
 
-export const assignmentService = {
-  // Get all assignments with filters
-  getAllAssignments: (params = {}) => {
-    return api.get('/assignments', { params });
+const assignmentService = {
+  // Obtener todas las tareas
+  getAssignments: async (params = {}) => {
+    try {
+      const response = await api.get('/assignments', { params });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get assignment by ID
-  getAssignmentById: (id) => {
-    return api.get(`/assignments/${id}`);
+  // Obtener tarea por ID
+  getAssignmentById: async (id) => {
+    try {
+      const response = await api.get(`/assignments/${id}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Create new assignment
-  createAssignment: (assignmentData) => {
-    return api.post('/assignments', assignmentData);
+  // Crear tarea
+  createAssignment: async (assignmentData) => {
+    try {
+      const response = await api.post('/assignments', assignmentData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Update assignment
-  updateAssignment: (id, assignmentData) => {
-    return api.put(`/assignments/${id}`, assignmentData);
+  // Actualizar tarea
+  updateAssignment: async (id, assignmentData) => {
+    try {
+      const response = await api.put(`/assignments/${id}`, assignmentData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Delete assignment
-  deleteAssignment: (id) => {
-    return api.delete(`/assignments/${id}`);
+  // Eliminar tarea
+  deleteAssignment: async (id) => {
+    try {
+      const response = await api.delete(`/assignments/${id}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get assignments for student
-  getStudentAssignments: (studentId, params = {}) => {
-    return api.get(`/assignments/student/${studentId}`, { params });
+  // Obtener tareas por curso
+  getAssignmentsByCourse: async (courseId) => {
+    try {
+      const response = await api.get(`/assignments/course/${courseId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get assignments for instructor
-  getInstructorAssignments: (instructorId, params = {}) => {
-    return api.get(`/assignments/instructor/${instructorId}`, { params });
+  // Obtener entregas de una tarea
+  getAssignmentSubmissions: async (assignmentId) => {
+    try {
+      const response = await api.get(`/assignments/${assignmentId}/submissions`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get student's courses
-  getStudentCourses: (studentId) => {
-    return api.get(`/users/${studentId}/courses`);
+  // Crear entrega de tarea
+  createSubmission: async (assignmentId, submissionData) => {
+    try {
+      const formData = new FormData();
+      
+      if (submissionData.file) {
+        formData.append('file', submissionData.file);
+      }
+      
+      if (submissionData.submissionText) {
+        formData.append('submissionText', submissionData.submissionText);
+      }
+
+      const response = await api.post(`/assignments/${assignmentId}/submissions`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get instructor's courses
-  getInstructorCourses: (instructorId) => {
-    return api.get(`/users/${instructorId}/courses`);
+  // Actualizar entrega de tarea
+  updateSubmission: async (assignmentId, submissionId, submissionData) => {
+    try {
+      const formData = new FormData();
+      
+      if (submissionData.file) {
+        formData.append('file', submissionData.file);
+      }
+      
+      if (submissionData.submissionText) {
+        formData.append('submissionText', submissionData.submissionText);
+      }
+
+      const response = await api.put(`/assignments/${assignmentId}/submissions/${submissionId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Submit assignment
-  submitAssignment: (assignmentId, formData) => {
-    return api.post(`/assignments/${assignmentId}/submissions`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+  // Calificar entrega
+  gradeSubmission: async (assignmentId, submissionId, gradeData) => {
+    try {
+      const response = await api.post(`/assignments/${assignmentId}/submissions/${submissionId}/grade`, gradeData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get student submission
-  getStudentSubmission: (assignmentId, studentId) => {
-    return api.get(`/assignments/${assignmentId}/submissions/student/${studentId}`);
+  // Obtener entrega del estudiante
+  getStudentSubmission: async (assignmentId, studentId) => {
+    try {
+      const response = await api.get(`/assignments/${assignmentId}/submissions/student/${studentId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Update submission
-  updateSubmission: (submissionId, formData) => {
-    return api.put(`/submissions/${submissionId}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-  },
-
-  // Get all submissions for assignment
-  getAssignmentSubmissions: (assignmentId) => {
-    return api.get(`/assignments/${assignmentId}/submissions`);
-  },
-
-  // Grade submission
-  gradeSubmission: (submissionId, gradeData) => {
-    return api.put(`/submissions/${submissionId}/grade`, gradeData);
-  },
-
-  // Get assignment statistics
-  getAssignmentStatistics: (assignmentId) => {
-    return api.get(`/assignments/${assignmentId}/statistics`);
-  },
-
-  // Bulk grade submissions
-  bulkGradeSubmissions: (assignmentId, gradesData) => {
-    return api.post(`/assignments/${assignmentId}/bulk-grade`, gradesData);
-  },
-
-  // Export assignment grades
-  exportGrades: (assignmentId, format = 'xlsx') => {
-    return api.get(`/assignments/${assignmentId}/export`, {
-      params: { format },
-      responseType: 'blob'
-    });
+  // Obtener tareas del estudiante
+  getStudentAssignments: async (studentId) => {
+    try {
+      const response = await api.get(`/assignments/student/${studentId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 };
+
+export default assignmentService;
