@@ -1,19 +1,13 @@
 import React, { useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import classNames from 'classnames';
-import { FaTimes } from 'react-icons/fa';
 import styles from './Modal.module.css';
 
-const Modal = ({
-  isOpen,
-  onClose,
-  title,
-  children,
+const Modal = ({ 
+  isOpen, 
+  onClose, 
+  title, 
+  children, 
   size = 'medium',
-  closeOnBackdrop = true,
-  showCloseButton = true,
-  className,
-  ...props
+  closeOnOverlayClick = true 
 }) => {
   useEffect(() => {
     if (isOpen) {
@@ -45,38 +39,26 @@ const Modal = ({
 
   if (!isOpen) return null;
 
-  const modalClasses = classNames(
-    styles.modal,
-    styles[size],
-    className
-  );
-
-  const handleBackdropClick = (e) => {
-    if (e.target === e.currentTarget && closeOnBackdrop) {
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget && closeOnOverlayClick) {
       onClose();
     }
   };
 
-  return ReactDOM.createPortal(
-    <div className={styles.backdrop} onClick={handleBackdropClick}>
-      <div className={modalClasses} {...props}>
-        {(title || showCloseButton) && (
-          <div className={styles.header}>
-            {title && <h2 className={styles.title}>{title}</h2>}
-            {showCloseButton && (
-              <button className={styles.closeButton} onClick={onClose}>
-                <FaTimes />
-              </button>
-            )}
-          </div>
-        )}
-        
+  return (
+    <div className={styles.overlay} onClick={handleOverlayClick}>
+      <div className={`${styles.modal} ${styles[size]}`}>
+        <div className={styles.header}>
+          <h3 className={styles.title}>{title}</h3>
+          <button className={styles.closeButton} onClick={onClose}>
+            ×
+          </button>
+        </div>
         <div className={styles.content}>
           {children}
         </div>
       </div>
-    </div>,
-    document.body
+    </div>
   );
 };
 
