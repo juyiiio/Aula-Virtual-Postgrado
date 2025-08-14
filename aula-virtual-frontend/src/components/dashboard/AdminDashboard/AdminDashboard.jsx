@@ -1,222 +1,144 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery } from 'react-query';
 import StatsCard from '../StatsCard/StatsCard';
 import Card from '../../common/Card/Card';
 import Button from '../../common/Button/Button';
 import Loading from '../../common/Loading/Loading';
-import { FaUsers, FaBook, FaTasks, FaGraduationCap, FaPlus, FaChartLine } from 'react-icons/fa';
-import { userService } from '../../../services/userService';
-import { courseService } from '../../../services/courseService';
-import { assignmentService } from '../../../services/assignmentService';
+import userService from '../../../services/userService';
+import courseService from '../../../services/courseService';
+import announcementService from '../../../services/announcementService';
 import styles from './AdminDashboard.module.css';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalCourses: 0,
-    totalAssignments: 0,
-    totalStudents: 0
+    totalStudents: 0,
+    totalInstructors: 0
   });
+  const [recentAnnouncements, setRecentAnnouncements] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const { data: users, isLoading: usersLoading } = useQuery(
-    'users-stats',
-    () => userService.getAllUsers({ limit: 1 }),
-    {
-      onSuccess: (data) => {
-        setStats(prev => ({
-          ...prev,
-          totalUsers: data.total || 0,
-          totalStudents: data.data?.filter(user => 
-            user.roles?.some(role => role.name === 'STUDENT')
-          ).length || 0
-        }));
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        setLoading(true);
+        
+        const [users, courses, announcements] = await Promise.all([
+          userService.getUsers(),
+          courseService.getCourses(),
+          announcementService.getRecentAnnouncements(5)
+        ]);
+
+        const students = users.filter(user => 
+          user.roles?.some(role => role.name === 'STUDENT')
+        );
+        const instructors = users.filter(user => 
+          user.roles?.some(role => role.name === 'INSTRUCTOR')
+        );
+
+        setStats({
+          totalUsers: users.length,
+          totalCourses: courses.length,
+          totalStudents: students.length,
+          totalInstructors: instructors.length
+        });
+
+        setRecentAnnouncements(announcements);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      } finally {
+        setLoading(false);
       }
-    }
-  );
+    };
 
-  const { data: courses, isLoading: coursesLoading } = useQuery(
-    'courses-stats',
-    () => courseService.getAllCourses({ limit: 1 }),
-    {
-      onSuccess: (data) => {
-        setStats(prev => ({
-          ...prev,
-          totalCourses: data.total || 0
-        }));
-      }
-    }
-  );
+    fetchDashboardData();
+  }, []);
 
-  const { data: assignments, isLoading: assignmentsLoading } = useQuery(
-    'assignments-stats',
-    () => assignmentService.getAllAssignments({ limit: 1 }),
-    {
-      onSuccess: (data) => {
-        setStats(prev => ({
-          ...prev,
-          totalAssignments: data.total || 0
-        }));
-      }
-    }
-  );
-
-  const isLoading = usersLoading || coursesLoading || assignmentsLoading;
-
-  if (isLoading) {
-    return <Loading text="Cargando estadísticas..." />;
+  if (loading) {
+    return <Loading message="Cargando dashboard..." />;
   }
 
   return (
     <div className={styles.dashboard}>
       <div className={styles.header}>
-        <div className={styles.headerContent}>
-          <h1 className={styles.title}>Panel de Administración</h1>
-          <p className={styles.subtitle}>
-            Gestiona usuarios, cursos y contenido del aula virtual
-          </p>
-        </div>
-        <div className={styles.headerActions}>
-          <Button variant="primary" icon={<FaPlus />}>
-            Nuevo Usuario
-          </Button>
-          <Button variant="outline" icon={<FaChartLine />}>
-            Ver Reportes
-          </Button>
-        </div>
+        <h1 className={styles.title}>Dashboard Administrativo</h1>
+        <p className={styles.subtitle}>Panel de control del sistema</p>
       </div>
 
       <div className={styles.statsGrid}>
         <StatsCard
           title="Total Usuarios"
           value={stats.totalUsers}
-          icon={<FaUsers />}
+          icon="👥"
           color="primary"
-          trend={{ value: 12, type: 'increase' }}
+        />
+        <StatsCard
+          title="Total Cursos"
+          value={stats.totalCourses}
+          icon="📚"
+          color="success"
         />
         <StatsCard
           title="Estudiantes"
           value={stats.totalStudents}
-          icon={<FaGraduationCap />}
-          color="success"
-          trend={{ value: 8, type: 'increase' }}
-        />
-        <StatsCard
-          title="Cursos Activos"
-          value={stats.totalCourses}
-          icon={<FaBook />}
+          icon="🎓"
           color="info"
-          trend={{ value: 3, type: 'increase' }}
         />
         <StatsCard
-          title="Tareas Creadas"
-          value={stats.totalAssignments}
-          icon={<FaTasks />}
+          title="Instructores"
+          value={stats.totalInstructors}
+          icon="👨‍🏫"
           color="warning"
-          trend={{ value: 15, type: 'increase' }}
         />
       </div>
 
-      <div className={styles.contentGrid}>
-        <Card title="Gestión de Usuarios" className={styles.managementCard}>
-          <div className={styles.cardContent}>
-            <p className={styles.cardDescription}>
-              Administra usuarios, roles y permisos del sistema
-            </p>
-            <div className={styles.cardActions}>
-              <Button variant="primary" size="small">
-                Ver Usuarios
-              </Button>
-              <Button variant="outline" size="small">
+      <div className={styles.content}>
+        <div className={styles.section}>
+          <Card title="Anuncios Recientes">
+            {recentAnnouncements.length > 0 ? (
+              <div className={styles.announcements}>
+                {recentAnnouncements.map(announcement => (
+                  <div key={announcement.id} className={styles.announcement}>
+                    <h4 className={styles.announcementTitle}>
+                      {announcement.title}
+                    </h4>
+                    <p className={styles.announcementContent}>
+                      {announcement.content}
+                    </p>
+                    <span className={styles.announcementDate}>
+                      {new Date(announcement.publishedAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className={styles.noData}>No hay anuncios recientes</p>
+            )}
+          </Card>
+        </div>
+
+        <div className={styles.section}>
+          <Card title="Acciones Rápidas">
+            <div className={styles.quickActions}>
+              <Button variant="primary">
                 Crear Usuario
               </Button>
-            </div>
-          </div>
-        </Card>
-
-        <Card title="Gestión de Cursos" className={styles.managementCard}>
-          <div className={styles.cardContent}>
-            <p className={styles.cardDescription}>
-              Crea y administra cursos, programas y contenido académico
-            </p>
-            <div className={styles.cardActions}>
-              <Button variant="primary" size="small">
-                Ver Cursos
-              </Button>
-              <Button variant="outline" size="small">
+              <Button variant="outline">
                 Crear Curso
               </Button>
-            </div>
-          </div>
-        </Card>
-
-        <Card title="Reportes y Estadísticas" className={styles.managementCard}>
-          <div className={styles.cardContent}>
-            <p className={styles.cardDescription}>
-              Genera reportes detallados y visualiza estadísticas del sistema
-            </p>
-            <div className={styles.cardActions}>
-              <Button variant="primary" size="small">
+              <Button variant="secondary">
+                Nuevo Anuncio
+              </Button>
+              <Button variant="ghost">
                 Ver Reportes
               </Button>
-              <Button variant="outline" size="small">
-                Exportar Datos
-              </Button>
             </div>
-          </div>
-        </Card>
-
-        <Card title="Configuración del Sistema" className={styles.managementCard}>
-          <div className={styles.cardContent}>
-            <p className={styles.cardDescription}>
-              Configura parámetros generales y preferencias del sistema
-            </p>
-            <div className={styles.cardActions}>
-              <Button variant="primary" size="small">
-                Configurar
-              </Button>
-              <Button variant="outline" size="small">
-                Ver Logs
-              </Button>
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      <div className={styles.recentActivity}>
-        <Card title="Actividad Reciente">
-          <div className={styles.activityList}>
-            <div className={styles.activityItem}>
-              <div className={styles.activityIcon}>
-                <FaUsers />
-              </div>
-              <div className={styles.activityContent}>
-                <p className={styles.activityTitle}>Nuevo usuario registrado</p>
-                <p className={styles.activityTime}>Hace 2 horas</p>
-              </div>
-            </div>
-            <div className={styles.activityItem}>
-              <div className={styles.activityIcon}>
-                <FaBook />
-              </div>
-              <div className={styles.activityContent}>
-                <p className={styles.activityTitle}>Curso "Machine Learning" actualizado</p>
-                <p className={styles.activityTime}>Hace 4 horas</p>
-              </div>
-            </div>
-            <div className={styles.activityItem}>
-              <div className={styles.activityIcon}>
-                <FaTasks />
-              </div>
-              <div className={styles.activityContent}>
-                <p className={styles.activityTitle}>Nueva tarea asignada</p>
-                <p className={styles.activityTime}>Hace 6 horas</p>
-              </div>
-            </div>
-          </div>
-        </Card>
+          </Card>
+        </div>
       </div>
     </div>
   );
 };
 
 export default AdminDashboard;
+
