@@ -1,179 +1,145 @@
 import api from './api';
 
-export const forumService = {
-  // Get all forums with filters
-  getAllForums: (params = {}) => {
-    return api.get('/forums', { params });
+const forumService = {
+  // Obtener todos los foros
+  getForums: async (params = {}) => {
+    try {
+      const response = await api.get('/forums', { params });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get forum by ID
-  getForumById: (id) => {
-    return api.get(`/forums/${id}`);
+  // Obtener foro por ID
+  getForumById: async (id) => {
+    try {
+      const response = await api.get(`/forums/${id}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Create new forum
-  createForum: (forumData) => {
-    return api.post('/forums', forumData);
+  // Crear foro
+  createForum: async (forumData) => {
+    try {
+      const response = await api.post('/forums', forumData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Update forum
-  updateForum: (id, forumData) => {
-    return api.put(`/forums/${id}`, forumData);
+  // Actualizar foro
+  updateForum: async (id, forumData) => {
+    try {
+      const response = await api.put(`/forums/${id}`, forumData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Delete forum
-  deleteForum: (id) => {
-    return api.delete(`/forums/${id}`);
+  // Eliminar foro
+  deleteForum: async (id) => {
+    try {
+      const response = await api.delete(`/forums/${id}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get forum categories
-  getForumCategories: () => {
-    return api.get('/forum-categories');
+  // Obtener foros por curso
+  getForumsByCourse: async (courseId) => {
+    try {
+      const response = await api.get(`/forums/course/${courseId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get popular topics
-  getPopularTopics: (params = {}) => {
-    return api.get('/topics/popular', { params });
+  // Obtener posts del foro
+  getForumPosts: async (forumId, params = {}) => {
+    try {
+      const response = await api.get(`/forums/${forumId}/posts`, { params });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get recent forum activity
-  getRecentActivity: (params = {}) => {
-    return api.get('/forums/activity', { params });
+  // Obtener post por ID
+  getPostById: async (postId) => {
+    try {
+      const response = await api.get(`/posts/${postId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get forum topics
-  getForumTopics: (forumId, params = {}) => {
-    return api.get(`/forums/${forumId}/topics`, { params });
+  // Crear post
+  createPost: async (forumId, postData) => {
+    try {
+      const response = await api.post(`/forums/${forumId}/posts`, postData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Create new topic
-  createTopic: (forumId, topicData) => {
-    return api.post(`/forums/${forumId}/topics`, topicData);
+  // Responder a post
+  replyToPost: async (postId, replyData) => {
+    try {
+      const response = await api.post(`/posts/${postId}/replies`, replyData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Get topic by ID
-  getTopicById: (topicId) => {
-    return api.get(`/topics/${topicId}`);
+  // Actualizar post
+  updatePost: async (postId, postData) => {
+    try {
+      const response = await api.put(`/posts/${postId}`, postData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Update topic
-  updateTopic: (topicId, topicData) => {
-    return api.put(`/topics/${topicId}`, topicData);
+  // Eliminar post
+  deletePost: async (postId) => {
+    try {
+      const response = await api.delete(`/posts/${postId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Delete topic
-  deleteTopic: (topicId) => {
-    return api.delete(`/topics/${topicId}`);
+  // Fijar post
+  pinPost: async (postId) => {
+    try {
+      const response = await api.post(`/posts/${postId}/pin`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  // Pin/Unpin topic
-  pinTopic: (topicId, isPinned) => {
-    return api.put(`/topics/${topicId}/pin`, { isPinned });
-  },
-
-  // Lock/Unlock topic
-  lockTopic: (topicId, isLocked) => {
-    return api.put(`/topics/${topicId}/lock`, { isLocked });
-  },
-
-  // Like/Unlike topic
-  likeTopic: (topicId, isLiked) => {
-    return api.put(`/topics/${topicId}/like`, { isLiked });
-  },
-
-  // Get topic posts
-  getTopicPosts: (topicId, params = {}) => {
-    return api.get(`/topics/${topicId}/posts`, { params });
-  },
-
-  // Create new post
-  createPost: (topicId, postData) => {
-    return api.post(`/topics/${topicId}/posts`, postData);
-  },
-
-  // Update post
-  updatePost: (postId, postData) => {
-    return api.put(`/posts/${postId}`, postData);
-  },
-
-  // Delete post
-  deletePost: (postId) => {
-    return api.delete(`/posts/${postId}`);
-  },
-
-  // Like/Unlike post
-  likePost: (postId, isLiked) => {
-    return api.put(`/posts/${postId}/like`, { isLiked });
-  },
-
-  // Report post
-  reportPost: (postId, reportData) => {
-    return api.post(`/posts/${postId}/report`, reportData);
-  },
-
-  // Search forums
-  searchForums: (query, params = {}) => {
-    return api.get('/forums/search', { 
-      params: { q: query, ...params } 
-    });
-  },
-
-  // Search topics
-  searchTopics: (query, params = {}) => {
-    return api.get('/topics/search', { 
-      params: { q: query, ...params } 
-    });
-  },
-
-  // Search posts
-  searchPosts: (query, params = {}) => {
-    return api.get('/posts/search', { 
-      params: { q: query, ...params } 
-    });
-  },
-
-  // Get user's forum statistics
-  getUserForumStats: (userId) => {
-    return api.get(`/users/${userId}/forum-stats`);
-  },
-
-  // Join forum (for private forums)
-  joinForum: (forumId) => {
-    return api.post(`/forums/${forumId}/join`);
-  },
-
-  // Leave forum
-  leaveForum: (forumId) => {
-    return api.post(`/forums/${forumId}/leave`);
-  },
-
-  // Get forum members
-  getForumMembers: (forumId, params = {}) => {
-    return api.get(`/forums/${forumId}/members`, { params });
-  },
-
-  // Add forum moderator
-  addModerator: (forumId, userId) => {
-    return api.post(`/forums/${forumId}/moderators`, { userId });
-  },
-
-  // Remove forum moderator
-  removeModerator: (forumId, userId) => {
-    return api.delete(`/forums/${forumId}/moderators/${userId}`);
-  },
-
-  // Get forum statistics
-  getForumStatistics: (forumId) => {
-    return api.get(`/forums/${forumId}/statistics`);
-  },
-
-  // Subscribe to topic notifications
-  subscribeToTopic: (topicId) => {
-    return api.post(`/topics/${topicId}/subscribe`);
-  },
-
-  // Unsubscribe from topic notifications
-  unsubscribeFromTopic: (topicId) => {
-    return api.delete(`/topics/${topicId}/subscribe`);
+  // Desfijar post
+  unpinPost: async (postId) => {
+    try {
+      const response = await api.post(`/posts/${postId}/unpin`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 };
+
+export default forumService;
