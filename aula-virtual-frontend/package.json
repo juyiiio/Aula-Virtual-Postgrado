@@ -1,0 +1,56 @@
+{
+  "name": "aula-virtual-frontend",
+  "version": "1.0.0",
+  "description": "Frontend para Aula Virtual de Postgrado - UNSLG",
+  "main": "src/index.js",
+  "homepage": ".",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.1",
+    "axios": "^1.3.4",
+    "react-query": "^3.39.3",
+    "react-hook-form": "^7.43.5",
+    "react-select": "^5.7.0",
+    "react-datepicker": "^4.10.0",
+    "react-calendar": "^4.0.0",
+    "socket.io-client": "^4.6.1",
+    "jwt-decode": "^3.1.2",
+    "react-toastify": "^9.1.1",
+    "react-modal": "^3.16.1",
+    "react-dropzone": "^14.2.3",
+    "date-fns": "^2.29.3",
+    "classnames": "^2.3.2",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "react-scripts": "5.0.1",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/user-event": "^13.5.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
