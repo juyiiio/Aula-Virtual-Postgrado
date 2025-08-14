@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery } from 'react-query';
-import { useAuth } from '../../../context/AuthContext';
+import { Link } from 'react-router-dom';
 import StatsCard from '../StatsCard/StatsCard';
 import Card from '../../common/Card/Card';
 import Button from '../../common/Button/Button';
 import Loading from '../../common/Loading/Loading';
-import { FaBook, FaTasks, FaClipboardCheck, FaClock, FaCalendarAlt, FaComments } from 'react-icons/fa';
-import { courseService } from '../../../services/courseService';
-import { assignmentService } from '../../../services/assignmentService';
-import { examService } from '../../../services/examService';
+import useAuth from '../../../hooks/useAuth';
+import courseService from '../../../services/courseService';
+import assignmentService from '../../../services/assignmentService';
+import examService from '../../../services/examService';
+import announcementService from '../../../services/announcementService';
 import styles from './StudentDashboard.module.css';
 
 const StudentDashboard = () => {
@@ -17,253 +17,212 @@ const StudentDashboard = () => {
     enrolledCourses: 0,
     pendingAssignments: 0,
     upcomingExams: 0,
-    completedTasks: 0
+    totalGrade: 0
   });
+  const [courses, setCourses] = useState([]);
+  const [pendingTasks, setPendingTasks] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const { data: courses, isLoading: coursesLoading } = useQuery(
-    ['student-courses', user?.id],
-    () => courseService.getEnrolledCourses(user?.id),
-    {
-      enabled: !!user?.id,
-      onSuccess: (data) => {
-        setStats(prev => ({
-          ...prev,
-          enrolledCourses: data.length || 0
-        }));
-      }
-    }
-  );
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      if (!user?.id) return;
 
-  const { data: assignments, isLoading: assignmentsLoading } = useQuery(
-    ['student-assignments', user?.id],
-    () => assignmentService.getStudentAssignments(user?.id),
-    {
-      enabled: !!user?.id,
-      onSuccess: (data) => {
-        const pending = data.filter(assignment => 
-          !assignment.submissions?.some(sub => sub.studentId === user?.id)
-        );
-        const completed = data.filter(assignment => 
-          assignment.submissions?.some(sub => sub.studentId === user?.id)
-        );
+      try {
+        setLoading(true);
         
-        setStats(prev => ({
-          ...prev,
-          pendingAssignments: pending.length || 0,
-          completedTasks: completed.length || 0
-        }));
-      }
-    }
-  );
+        const [studentCourses, recentAnnouncements] = await Promise.all([
+          courseService.getStudentCourses(user.id),
+          announcementService.getRecentAnnouncements(3)
+        ]);
 
-  const { data: exams, isLoading: examsLoading } = useQuery(
-    ['student-exams', user?.id],
-    () => examService.getStudentExams(user?.id),
-    {
-      enabled: !!user?.id,
-      onSuccess: (data) => {
-        const upcoming = data.filter(exam => 
-          new Date(exam.startTime) > new Date()
+        setCourses(studentCourses);
+        setAnnouncements(recentAnnouncements);
+
+        const assignmentsPromises = studentCourses.map(course =>
+          assignmentService.getStudentAssignments(user.id)
         );
-        
-        setStats(prev => ({
-          ...prev,
-          upcomingExams: upcoming.length || 0
-        }));
+        const examsPromises = studentCourses.map(course =>
+          examService.getStudentExams(user.id)
+        );
+
+        const [assignmentsResults, examsResults] = await Promise.all([
+          Promise.all(assignmentsPromises),
+          Promise.all(examsPromises)
+        ]);
+
+        const allAssignments = assignmentsResults.flat();
+        const allExams = examsResults.flat();
+
+        const now = new Date();
+        const pendingAssignments = allAssignments.filter(a => 
+          new Date(a.dueDate) > now && !a.submitted
+        );
+        const upcomingExams = allExams.filter(e => 
+          new Date(e.startTime) > now
+        );
+
+        const tasks = [
+          ...pendingAssignments.map(a => ({
+            type: 'assignment',
+            title: a.title,
+            dueDate: a.dueDate,
+            courseId: a.courseId
+          })),
+          ...upcomingExams.map(e => ({
+            type: 'exam',
+            title: e.title,
+            dueDate: e.startTime,
+            courseId: e.courseId
+          }))
+        ].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate)).slice(0, 5);
+
+        setPendingTasks(tasks);
+
+        setStats({
+          enrolledCourses: studentCourses.length,
+          pendingAssignments: pendingAssignments.length,
+          upcomingExams: upcomingExams.length,
+          totalGrade: 0 // Calcular promedio cuando esté disponible
+        });
+
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      } finally {
+        setLoading(false);
       }
-    }
-  );
+    };
 
-  const isLoading = coursesLoading || assignmentsLoading || examsLoading;
+    fetchDashboardData();
+  }, [user]);
 
-  if (isLoading) {
-    return <Loading text="Cargando información del estudiante..." />;
+  if (loading) {
+    return <Loading message="Cargando dashboard..." />;
   }
-
-  const pendingAssignments = assignments?.filter(assignment => 
-    !assignment.submissions?.some(sub => sub.studentId === user?.id) &&
-    new Date(assignment.dueDate) > new Date()
-  ) || [];
-
-  const upcomingExams = exams?.filter(exam => 
-    new Date(exam.startTime) > new Date()
-  ) || [];
 
   return (
     <div className={styles.dashboard}>
       <div className={styles.header}>
-        <div className={styles.headerContent}>
-          <h1 className={styles.title}>Mi Aula Virtual</h1>
-          <p className={styles.subtitle}>
-            Bienvenido a tu espacio de aprendizaje
-          </p>
-        </div>
-        <div className={styles.headerActions}>
-          <Button variant="primary" icon={<FaCalendarAlt />}>
-            Ver Calendario
-          </Button>
-          <Button variant="outline" icon={<FaComments />}>
-            Foros
-          </Button>
-        </div>
+        <h1 className={styles.title}>Mi Dashboard</h1>
+        <p className={styles.subtitle}>Bienvenido, {user?.firstName} {user?.lastName}</p>
       </div>
 
       <div className={styles.statsGrid}>
         <StatsCard
           title="Cursos Inscritos"
           value={stats.enrolledCourses}
-          icon={<FaBook />}
+          icon="📚"
           color="primary"
         />
         <StatsCard
           title="Tareas Pendientes"
           value={stats.pendingAssignments}
-          icon={<FaTasks />}
+          icon="📝"
           color="warning"
         />
         <StatsCard
           title="Exámenes Próximos"
           value={stats.upcomingExams}
-          icon={<FaClipboardCheck />}
-          color="danger"
+          icon="📋"
+          color="error"
         />
         <StatsCard
-          title="Tareas Completadas"
-          value={stats.completedTasks}
-          icon={<FaClock />}
+          title="Promedio"
+          value={stats.totalGrade || '--'}
+          icon="⭐"
           color="success"
         />
       </div>
 
-      <div className={styles.contentGrid}>
-        <Card title="Mis Cursos" className={styles.coursesCard}>
-          <div className={styles.coursesList}>
-            {courses?.slice(0, 3).map(course => (
-              <div key={course.id} className={styles.courseItem}>
-                <div className={styles.courseInfo}>
-                  <h4 className={styles.courseName}>{course.name}</h4>
-                  <p className={styles.courseCode}>{course.code}</p>
-                  <p className={styles.courseInstructor}>
-                    Prof. {course.instructor?.firstName} {course.instructor?.lastName}
-                  </p>
-                </div>
-                <div className={styles.courseProgress}>
-                  <div className={styles.progressBar}>
-                    <div 
-                      className={styles.progressFill} 
-                      style={{ width: '75%' }}
-                    ></div>
+      <div className={styles.content}>
+        <div className={styles.section}>
+          <Card title="Mis Cursos">
+            {courses.length > 0 ? (
+              <div className={styles.courses}>
+                {courses.map(course => (
+                  <div key={course.id} className={styles.course}>
+                    <h4 className={styles.courseTitle}>
+                      <Link to={`/courses/${course.id}`} className={styles.courseLink}>
+                        {course.name}
+                      </Link>
+                    </h4>
+                    <p className={styles.courseCode}>{course.code}</p>
+                    <p className={styles.courseInstructor}>
+                      Prof. {course.instructor?.firstName} {course.instructor?.lastName}
+                    </p>
                   </div>
-                  <span className={styles.progressText}>75%</span>
-                </div>
-                <Button size="small" variant="outline">
-                  Ingresar
-                </Button>
+                ))}
               </div>
-            ))}
-            <Button variant="ghost" size="small" fullWidth>
-              Ver todos los cursos
-            </Button>
-          </div>
-        </Card>
-
-        <Card title="Tareas Pendientes" className={styles.assignmentsCard}>
-          <div className={styles.assignmentsList}>
-            {pendingAssignments?.slice(0, 3).map(assignment => (
-              <div key={assignment.id} className={styles.assignmentItem}>
-                <div className={styles.assignmentInfo}>
-                  <h4 className={styles.assignmentTitle}>{assignment.title}</h4>
-                  <p className={styles.assignmentCourse}>{assignment.course?.name}</p>
-                  <div className={styles.assignmentMeta}>
-                    <span className={styles.assignmentDue}>
-                      Vence: {new Date(assignment.dueDate).toLocaleDateString()}
-                    </span>
-                    <span className={styles.assignmentPoints}>
-                      {assignment.maxPoints} pts
-                    </span>
-                  </div>
-                </div>
-                <Button size="small" variant="primary">
-                  Realizar
-                </Button>
-              </div>
-            ))}
-            {pendingAssignments?.length === 0 && (
-              <div className={styles.emptyState}>
-                <p>¡No tienes tareas pendientes!</p>
-              </div>
+            ) : (
+              <p className={styles.noData}>No estás inscrito en ningún curso</p>
             )}
-            <Button variant="ghost" size="small" fullWidth>
-              Ver todas las tareas
-            </Button>
-          </div>
-        </Card>
+          </Card>
+        </div>
 
-        <Card title="Próximos Exámenes" className={styles.examsCard}>
-          <div className={styles.examsList}>
-            {upcomingExams?.slice(0, 3).map(exam => (
-              <div key={exam.id} className={styles.examItem}>
-                <div className={styles.examInfo}>
-                  <h4 className={styles.examTitle}>{exam.title}</h4>
-                  <p className={styles.examCourse}>{exam.course?.name}</p>
-                  <div className={styles.examMeta}>
-                    <span className={styles.examDate}>
-                      {new Date(exam.startTime).toLocaleDateString()}
+        <div className={styles.section}>
+          <Card title="Tareas y Exámenes Próximos">
+            {pendingTasks.length > 0 ? (
+              <div className={styles.tasks}>
+                {pendingTasks.map((task, index) => (
+                  <div key={index} className={styles.task}>
+                    <span className={styles.taskType}>
+                      {task.type === 'assignment' ? '📝' : '📋'}
                     </span>
-                    <span className={styles.examTime}>
-                      {new Date(exam.startTime).toLocaleTimeString()}
-                    </span>
+                    <div className={styles.taskInfo}>
+                      <h5 className={styles.taskTitle}>{task.title}</h5>
+                      <p className={styles.taskDate}>
+                        {new Date(task.dueDate).toLocaleDateString()}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className={styles.examType}>
-                  <span className={`${styles.examBadge} ${styles[exam.examType?.toLowerCase()]}`}>
-                    {exam.examType}
+                ))}
+              </div>
+            ) : (
+              <p className={styles.noData}>No tienes tareas pendientes</p>
+            )}
+          </Card>
+        </div>
+      </div>
+
+      <div className={styles.announcementsSection}>
+        <Card title="Anuncios Recientes">
+          {announcements.length > 0 ? (
+            <div className={styles.announcements}>
+              {announcements.map(announcement => (
+                <div key={announcement.id} className={styles.announcement}>
+                  <h4 className={styles.announcementTitle}>
+                    {announcement.title}
+                  </h4>
+                  <p className={styles.announcementContent}>
+                    {announcement.content}
+                  </p>
+                  <span className={styles.announcementDate}>
+                    {new Date(announcement.publishedAt).toLocaleDateString()}
                   </span>
                 </div>
-              </div>
-            ))}
-            {upcomingExams?.length === 0 && (
-              <div className={styles.emptyState}>
-                <p>No tienes exámenes próximos</p>
-              </div>
-            )}
-            <Button variant="ghost" size="small" fullWidth>
-              Ver todos los exámenes
-            </Button>
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p className={styles.noData}>No hay anuncios recientes</p>
+          )}
         </Card>
       </div>
 
-      <div className={styles.recentActivity}>
-        <Card title="Actividad Reciente">
-          <div className={styles.activityList}>
-            <div className={styles.activityItem}>
-              <div className={styles.activityIcon}>
-                <FaTasks />
-              </div>
-              <div className={styles.activityContent}>
-                <p className={styles.activityTitle}>Tarea entregada: "Análisis de Datos"</p>
-                <p className={styles.activityTime}>Hace 2 horas</p>
-              </div>
-            </div>
-            <div className={styles.activityItem}>
-              <div className={styles.activityIcon}>
-                <FaComments />
-              </div>
-              <div className={styles.activityContent}>
-                <p className={styles.activityTitle}>Nuevo mensaje en el foro de Machine Learning</p>
-                <p className={styles.activityTime}>Hace 4 horas</p>
-              </div>
-            </div>
-            <div className={styles.activityItem}>
-              <div className={styles.activityIcon}>
-                <FaBook />
-              </div>
-              <div className={styles.activityContent}>
-                <p className={styles.activityTitle}>Nuevo material disponible en Estadística</p>
-                <p className={styles.activityTime}>Hace 1 día</p>
-              </div>
-            </div>
+      <div className={styles.quickActions}>
+        <Card title="Acciones Rápidas">
+          <div className={styles.actions}>
+            <Button variant="primary">
+              Ver Calificaciones
+            </Button>
+            <Button variant="outline">
+              Calendario
+            </Button>
+            <Button variant="secondary">
+              Foros
+            </Button>
+            <Button variant="ghost">
+              Recursos
+            </Button>
           </div>
         </Card>
       </div>
