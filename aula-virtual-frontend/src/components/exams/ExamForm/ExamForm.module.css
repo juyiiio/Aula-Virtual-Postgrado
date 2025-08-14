@@ -1,106 +1,36 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xl);
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-lg);
-}
-
-.title {
-  font-size: var(--font-size-xxl);
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.tabsContainer {
-  background: var(--bg-primary);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-}
-
-.tabs {
-  display: flex;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.tab {
-  flex: 1;
-  padding: var(--spacing-lg);
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: var(--font-size-md);
-  font-weight: 500;
-  cursor: pointer;
-  transition: var(--transition-fast);
-  border-bottom: 3px solid transparent;
-}
-
-.tab:hover {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-}
-
-.activeTab {
-  color: var(--primary-color);
-  border-bottom-color: var(--primary-color);
-  background: var(--bg-secondary);
-}
-
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-md);
 }
 
-.formGrid {
+.row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--spacing-lg);
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
 }
 
-.formGroup {
+.selectContainer {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
 }
 
-.fullWidthGroup {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  grid-column: 1 / -1;
-}
-
-.label {
-  font-size: var(--font-size-md);
-  font-weight: 500;
+.selectLabel {
   color: var(--text-primary);
-  margin: 0;
-}
-
-.required {
-  color: var(--danger-color);
-  margin-left: 2px;
+  font-weight: 500;
+  font-size: var(--font-size-sm);
 }
 
 .select {
   width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-md);
-  background: var(--bg-primary);
+  padding: 0.75rem;
+  font-size: var(--font-size-base);
   color: var(--text-primary);
-  transition: var(--transition-fast);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  transition: border-color var(--transition-base);
 }
 
 .select:focus {
@@ -109,198 +39,17 @@
   box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
 }
 
-.select.error {
-  border-color: var(--danger-color);
-}
-
-.textarea {
-  width: 100%;
-  padding: var(--spacing-md);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-md);
-  font-family: inherit;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  resize: vertical;
-  min-height: 100px;
-  transition: var(--transition-fast);
-}
-
-.textarea:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
-}
-
-.textarea::placeholder {
-  color: var(--text-secondary);
-}
-
-.errorText {
-  color: var(--danger-color);
-  font-size: var(--font-size-sm);
-  margin-top: var(--spacing-xs);
-}
-
-.errorAlert {
-  background: rgba(244, 67, 54, 0.1);
-  border: 1px solid var(--danger-color);
-  color: var(--danger-color);
-  padding: var(--spacing-md);
-  border-radius: var(--radius-sm);
-  margin-bottom: var(--spacing-lg);
-  font-weight: 500;
-}
-
-.questionsSection {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xl);
-}
-
-.questionCard {
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  background: var(--bg-secondary);
-}
-
-.questionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-md);
-  border-bottom: 1px solid var(--border-color);
-}
-
-.questionHeader h4 {
-  font-size: var(--font-size-lg);
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.questionActions {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.questionContent {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
-}
-
-.optionsSection {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.optionItem {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
-
-.correctCheckbox {
-  width: 20px;
-  height: 20px;
-  accent-color: var(--success-color);
-  cursor: pointer;
-}
-
-.addQuestionButton {
-  align-self: center;
-  margin-top: var(--spacing-lg);
-}
-
-.settingsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-xl);
-}
-
-.settingGroup {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.settingGroup h4 {
-  font-size: var(--font-size-lg);
-  color: var(--text-primary);
-  margin: 0;
-  padding-bottom: var(--spacing-sm);
-  border-bottom: 1px solid var(--border-color);
-}
-
-.checkboxGroup {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.checkboxLabel {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  font-size: var(--font-size-md);
-  color: var(--text-primary);
-  cursor: pointer;
-  line-height: 1.5;
-}
-
-.checkboxLabel input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--primary-color);
-}
-
 .actions {
   display: flex;
   justify-content: flex-end;
   gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
   padding-top: var(--spacing-lg);
   border-top: 1px solid var(--border-color);
 }
 
 @media (max-width: 768px) {
-  .container {
-    max-width: none;
-  }
-  
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .tabs {
-    flex-direction: column;
-  }
-  
-  .tab {
-    flex: none;
-  }
-  
-  .formGrid {
-    grid-template-columns: 1fr;
-  }
-  
-  .questionActions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .optionItem {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--spacing-sm);
-  }
-  
-  .settingsGrid {
+  .row {
     grid-template-columns: 1fr;
   }
   
