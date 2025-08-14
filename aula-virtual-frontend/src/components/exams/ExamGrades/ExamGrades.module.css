@@ -1,0 +1,568 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
+}
+
+.headerContent {
+  flex: 1;
+}
+
+.title {
+  font-size: var(--font-size-xxl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-sm) 0;
+  line-height: 1.3;
+}
+
+.courseName {
+  font-size: var(--font-size-lg);
+  color: var(--primary-color);
+  font-weight: 500;
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.statisticsSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.statIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  background: var(--primary-color);
+  color: var(--text-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-lg);
+  flex-shrink: 0;
+}
+
+.statContent {
+  flex: 1;
+}
+
+.statValue {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+  margin-bottom: var(--spacing-xs);
+}
+
+.statLabel {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.gradesSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.gradesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-lg);
+  gap: var(--spacing-lg);
+}
+
+.gradesHeader h3 {
+  font-size: var(--font-size-xl);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  align-items: flex-end;
+}
+
+.searchFilter {
+  min-width: 300px;
+}
+
+.statusFilters {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.filterButton {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  white-space: nowrap;
+}
+
+.filterButton:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.filterButton.active {
+  background: var(--primary-color);
+  color: var(--text-white);
+  border-color: var(--primary-color);
+}
+
+.gradesTable {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr 1fr;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.headerCell {
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-right: 1px solid var(--border-color);
+}
+
+.headerCell:last-child {
+  border-right: none;
+}
+
+.tableBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr 1fr;
+  border-bottom: 1px solid var(--border-color);
+  transition: var(--transition-fast);
+}
+
+.tableRow:hover {
+  background: var(--bg-secondary);
+}
+
+.tableRow:last-child {
+  border-bottom: none;
+}
+
+.studentCell,
+.statusCell,
+.gradeCell,
+.timeCell,
+.dateCell,
+.actionsCell {
+  padding: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  border-right: 1px solid var(--border-color);
+  font-size: var(--font-size-md);
+}
+
+.studentCell:last-child,
+.statusCell:last-child,
+.gradeCell:last-child,
+.timeCell:last-child,
+.dateCell:last-child,
+.actionsCell:last-child {
+  border-right: none;
+}
+
+.studentInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.studentAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--primary-color);
+  color: var(--text-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.studentAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.studentDetails {
+  flex: 1;
+}
+
+.studentName {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.studentCode {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.statusContent {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.statusBadge {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusBadge.notStarted {
+  background: rgba(158, 158, 158, 0.1);
+  color: var(--text-secondary);
+}
+
+.statusBadge.inProgress {
+  background: rgba(255, 152, 0, 0.1);
+  color: var(--warning-color);
+}
+
+.statusBadge.passed {
+  background: rgba(76, 175, 80, 0.1);
+  color: var(--success-color);
+}
+
+.statusBadge.failed {
+  background: rgba(244, 67, 54, 0.1);
+  color: var(--danger-color);
+}
+
+.notStartedIcon {
+  color: var(--text-secondary);
+}
+
+.inProgressIcon {
+  color: var(--warning-color);
+}
+
+.passedIcon {
+  color: var(--success-color);
+}
+
+.failedIcon {
+  color: var(--danger-color);
+}
+
+.gradeContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.score {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  line-height: 1;
+}
+
+.percentage {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.noScore {
+  color: var(--text-disabled);
+  font-style: italic;
+}
+
+.timeCell,
+.dateCell {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.actionButtons {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.emptyState {
+  padding: var(--spacing-xxl);
+  text-align: center;
+  color: var(--text-secondary);
+  grid-column: 1 / -1;
+}
+
+.emptyState p {
+  margin: 0;
+}
+
+.gradeModal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.currentGrade {
+  text-align: center;
+  padding: var(--spacing-lg);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+.currentGrade h4 {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--text-primary);
+}
+
+.gradeDisplay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+}
+
+.currentScore {
+  font-size: var(--font-size-xxl);
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.currentPercentage {
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+}
+
+.adjustmentForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.feedbackSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.feedbackLabel {
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.feedbackTextarea {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-md);
+  font-family: inherit;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  resize: vertical;
+  transition: var(--transition-fast);
+}
+
+.feedbackTextarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+}
+
+.feedbackTextarea::placeholder {
+  color: var(--text-secondary);
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+}
+
+.notFound,
+.noPermission {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  gap: var(--spacing-lg);
+}
+
+.notFound h2,
+.noPermission h2 {
+  font-size: var(--font-size-xl);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.notFound p,
+.noPermission p {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .gradesHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filters {
+    align-items: stretch;
+  }
+  
+  .searchFilter {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .statusFilters {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .tableHeader,
+  .tableRow {
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+  }
+  
+  .timeCell,
+  .dateCell {
+    display: none;
+  }
+  
+  .headerCell:nth-child(4),
+  .headerCell:nth-child(5) {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: none;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .headerActions {
+    justify-content: stretch;
+  }
+  
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .tableHeader,
+  .tableRow {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .statusCell,
+  .gradeCell {
+    display: none;
+  }
+  
+  .headerCell:nth-child(2),
+  .headerCell:nth-child(3) {
+    display: none;
+  }
+  
+  .actionButtons {
+    flex-direction: column;
+  }
+  
+  .modalActions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .statCard {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .tableHeader,
+  .tableRow {
+    grid-template-columns: 1fr;
+  }
+  
+  .actionsCell {
+    display: none;
+  }
+  
+  .headerCell:last-child {
+    display: none;
+  }
+}
