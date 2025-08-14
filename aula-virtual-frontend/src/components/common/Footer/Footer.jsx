@@ -11,44 +11,32 @@ const Footer = () => {
           <div className={styles.section}>
             <h4 className={styles.title}>Aula Virtual UNSLG</h4>
             <p className={styles.description}>
-              Plataforma educativa para programas de postgrado de la 
-              Universidad Nacional San Luis Gonzaga de Ica.
+              Plataforma educativa de la Universidad Nacional San Luis Gonzaga de Ica
             </p>
           </div>
           
           <div className={styles.section}>
             <h4 className={styles.title}>Enlaces</h4>
             <ul className={styles.links}>
-              <li><a href="/dashboard">Dashboard</a></li>
-              <li><a href="/courses">Cursos</a></li>
-              <li><a href="/calendar">Calendario</a></li>
-              <li><a href="/resources">Recursos</a></li>
+              <li><a href="#" className={styles.link}>Soporte Técnico</a></li>
+              <li><a href="#" className={styles.link}>Manual de Usuario</a></li>
+              <li><a href="#" className={styles.link}>Contacto</a></li>
             </ul>
           </div>
           
           <div className={styles.section}>
-            <h4 className={styles.title}>Soporte</h4>
+            <h4 className={styles.title}>Universidad</h4>
             <ul className={styles.links}>
-              <li><a href="/help">Centro de Ayuda</a></li>
-              <li><a href="/contact">Contacto</a></li>
-              <li><a href="/faq">Preguntas Frecuentes</a></li>
+              <li><a href="#" className={styles.link}>Página Principal</a></li>
+              <li><a href="#" className={styles.link}>Postgrado</a></li>
+              <li><a href="#" className={styles.link}>Biblioteca</a></li>
             </ul>
-          </div>
-          
-          <div className={styles.section}>
-            <h4 className={styles.title}>Contacto</h4>
-            <div className={styles.contact}>
-              <p>Email: soporte@unslg.edu.pe</p>
-              <p>Teléfono: (056) 123-456</p>
-              <p>Dirección: Av. Los Maestros s/n, Ica</p>
-            </div>
           </div>
         </div>
         
         <div className={styles.bottom}>
           <p className={styles.copyright}>
-            © {currentYear} Universidad Nacional San Luis Gonzaga de Ica. 
-            Todos los derechos reservados.
+            © {currentYear} Universidad Nacional San Luis Gonzaga de Ica. Todos los derechos reservados.
           </p>
         </div>
       </div>
