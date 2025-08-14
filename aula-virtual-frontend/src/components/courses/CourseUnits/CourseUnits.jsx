@@ -1,361 +1,218 @@
-import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
-import Button from '../../common/Button/Button';
+import React, { useState, useEffect } from 'react';
 import Card from '../../common/Card/Card';
-import Input from '../../common/Input/Input';
-import Modal from '../../common/Modal/Modal';
+import Button from '../../common/Button/Button';
 import Loading from '../../common/Loading/Loading';
-import { FaPlus, FaEdit, FaTrash, FaBook, FaDragIndicator } from 'react-icons/fa';
-import { courseService } from '../../../services/courseService';
-import { toast } from 'react-toastify';
+import Modal from '../../common/Modal/Modal';
+import Input from '../../common/Input/Input';
+import useAuth from '../../../hooks/useAuth';
+import courseService from '../../../services/courseService';
+import useNotification from '../../../hooks/useNotification';
 import styles from './CourseUnits.module.css';
 
-const CourseUnits = ({ courseId, canEdit }) => {
-  const queryClient = useQueryClient();
-  const [showUnitModal, setShowUnitModal] = useState(false);
+const CourseUnits = ({ courseId }) => {
+  const [units, setUnits] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [editingUnit, setEditingUnit] = useState(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deletingUnit, setDeletingUnit] = useState(null);
-  
-  const [unitForm, setUnitForm] = useState({
+  const [formData, setFormData] = useState({
     title: '',
     description: '',
     unitOrder: 1
   });
-  const [unitErrors, setUnitErrors] = useState({});
+  const [formLoading, setFormLoading] = useState(false);
+  const { hasRole } = useAuth();
+  const { showError, showSuccess } = useNotification();
 
-  const { data: units, isLoading } = useQuery(
-    ['course-units', courseId],
-    () => courseService.getCourseUnits(courseId),
-    {
-      enabled: !!courseId
+  useEffect(() => {
+    fetchUnits();
+  }, [courseId]);
+
+  const fetchUnits = async () => {
+    try {
+      setLoading(true);
+      const unitsData = await courseService.getCourseUnits(courseId);
+      setUnits(unitsData);
+    } catch (error) {
+      console.error('Error fetching units:', error);
+    } finally {
+      setLoading(false);
     }
-  );
-
-  const createUnitMutation = useMutation(
-    (unitData) => courseService.createCourseUnit(courseId, unitData),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['course-units', courseId]);
-        toast.success('Unidad creada exitosamente');
-        handleCloseUnitModal();
-      },
-      onError: (error) => {
-        toast.error('Error al crear la unidad');
-      }
-    }
-  );
-
-  const updateUnitMutation = useMutation(
-    ({ unitId, unitData }) => courseService.updateCourseUnit(courseId, unitId, unitData),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['course-units', courseId]);
-        toast.success('Unidad actualizada exitosamente');
-        handleCloseUnitModal();
-      },
-      onError: (error) => {
-        toast.error('Error al actualizar la unidad');
-      }
-    }
-  );
-
-  const deleteUnitMutation = useMutation(
-    (unitId) => courseService.deleteCourseUnit(courseId, unitId),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['course-units', courseId]);
-        toast.success('Unidad eliminada exitosamente');
-        setShowDeleteModal(false);
-        setDeletingUnit(null);
-      },
-      onError: (error) => {
-        toast.error('Error al eliminar la unidad');
-      }
-    }
-  );
-
-  const handleOpenCreateModal = () => {
-    const maxOrder = units?.length ? Math.max(...units.map(u => u.unitOrder)) : 0;
-    setUnitForm({
-      title: '',
-      description: '',
-      unitOrder: maxOrder + 1
-    });
-    setEditingUnit(null);
-    setUnitErrors({});
-    setShowUnitModal(true);
   };
 
-  const handleOpenEditModal = (unit) => {
-    setUnitForm({
+  const handleAddUnit = () => {
+    setEditingUnit(null);
+    setFormData({
+      title: '',
+      description: '',
+      unitOrder: units.length + 1
+    });
+    setShowModal(true);
+  };
+
+  const handleEditUnit = (unit) => {
+    setEditingUnit(unit);
+    setFormData({
       title: unit.title,
       description: unit.description,
       unitOrder: unit.unitOrder
     });
-    setEditingUnit(unit);
-    setUnitErrors({});
-    setShowUnitModal(true);
+    setShowModal(true);
   };
 
-  const handleCloseUnitModal = () => {
-    setShowUnitModal(false);
-    setEditingUnit(null);
-    setUnitForm({
-      title: '',
-      description: '',
-      unitOrder: 1
-    });
-    setUnitErrors({});
-  };
-
-  const handleUnitFormChange = (e) => {
+  const handleFormChange = (e) => {
     const { name, value } = e.target;
-    setUnitForm(prev => ({
+    setFormData(prev => ({
       ...prev,
-      [name]: name === 'unitOrder' ? parseInt(value) || 1 : value
+      [name]: value
     }));
-    
-    if (unitErrors[name]) {
-      setUnitErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
   };
 
-  const validateUnitForm = () => {
-    const errors = {};
-    
-    if (!unitForm.title.trim()) {
-      errors.title = 'El título de la unidad es requerido';
-    }
-    
-    if (!unitForm.unitOrder || unitForm.unitOrder < 1) {
-      errors.unitOrder = 'El orden debe ser un número mayor a 0';
-    }
-    
-    setUnitErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const handleSubmitUnit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!validateUnitForm()) return;
-    
-    if (editingUnit) {
-      updateUnitMutation.mutate({
-        unitId: editingUnit.id,
-        unitData: unitForm
-      });
-    } else {
-      createUnitMutation.mutate(unitForm);
+    setFormLoading(true);
+    try {
+      if (editingUnit) {
+        await courseService.updateCourseUnit(courseId, editingUnit.id, formData);
+        showSuccess('Unidad actualizada exitosamente');
+      } else {
+        await courseService.createCourseUnit(courseId, formData);
+        showSuccess('Unidad creada exitosamente');
+      }
+      
+      setShowModal(false);
+      fetchUnits();
+    } catch (error) {
+      const message = error?.response?.data?.message || 'Error al guardar la unidad';
+      showError(message);
+    } finally {
+      setFormLoading(false);
     }
   };
 
-  const handleDeleteUnit = (unit) => {
-    setDeletingUnit(unit);
-    setShowDeleteModal(true);
-  };
+  const handleDeleteUnit = async (unitId) => {
+    if (!window.confirm('¿Estás seguro de eliminar esta unidad?')) {
+      return;
+    }
 
-  const confirmDeleteUnit = () => {
-    if (deletingUnit) {
-      deleteUnitMutation.mutate(deletingUnit.id);
+    try {
+      await courseService.deleteCourseUnit(courseId, unitId);
+      showSuccess('Unidad eliminada exitosamente');
+      fetchUnits();
+    } catch (error) {
+      const message = error?.response?.data?.message || 'Error al eliminar la unidad';
+      showError(message);
     }
   };
 
-  if (isLoading) {
-    return <Loading text="Cargando unidades..." />;
+  if (loading) {
+    return <Loading message="Cargando unidades..." />;
   }
-
-  const sortedUnits = units?.sort((a, b) => a.unitOrder - b.unitOrder) || [];
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h3 className={styles.title}>Unidades del Curso</h3>
-        {canEdit && (
-          <Button
-            variant="primary"
-            icon={<FaPlus />}
-            onClick={handleOpenCreateModal}
-          >
+        {hasRole('INSTRUCTOR') && (
+          <Button onClick={handleAddUnit} variant="primary" size="small">
             Nueva Unidad
           </Button>
         )}
       </div>
 
-      {sortedUnits.length === 0 ? (
-        <div className={styles.emptyState}>
-          <FaBook className={styles.emptyIcon} />
-          <h4>No hay unidades creadas</h4>
-          <p>Las unidades te ayudan a organizar el contenido del curso de manera estructurada.</p>
-          {canEdit && (
-            <Button
-              variant="primary"
-              icon={<FaPlus />}
-              onClick={handleOpenCreateModal}
-            >
-              Crear Primera Unidad
-            </Button>
-          )}
-        </div>
-      ) : (
-        <div className={styles.unitsList}>
-          {sortedUnits.map((unit) => (
-            <Card key={unit.id} className={styles.unitCard}>
+      {units.length > 0 ? (
+        <div className={styles.units}>
+          {units.map(unit => (
+            <Card key={unit.id} className={styles.unit}>
               <div className={styles.unitHeader}>
                 <div className={styles.unitInfo}>
-                  <div className={styles.unitOrder}>
-                    <FaDragIndicator className={styles.dragIcon} />
-                    <span>Unidad {unit.unitOrder}</span>
-                  </div>
-                  <h4 className={styles.unitTitle}>{unit.title}</h4>
+                  <h4 className={styles.unitTitle}>
+                    Unidad {unit.unitOrder}: {unit.title}
+                  </h4>
+                  {unit.description && (
+                    <p className={styles.unitDescription}>{unit.description}</p>
+                  )}
                 </div>
-                {canEdit && (
+                {hasRole('INSTRUCTOR') && (
                   <div className={styles.unitActions}>
                     <Button
                       variant="ghost"
                       size="small"
-                      icon={<FaEdit />}
-                      onClick={() => handleOpenEditModal(unit)}
+                      onClick={() => handleEditUnit(unit)}
                     >
                       Editar
                     </Button>
                     <Button
-                      variant="ghost"
+                      variant="error"
                       size="small"
-                      icon={<FaTrash />}
-                      onClick={() => handleDeleteUnit(unit)}
+                      onClick={() => handleDeleteUnit(unit.id)}
                     >
                       Eliminar
                     </Button>
                   </div>
                 )}
               </div>
-              
-              {unit.description && (
-                <div className={styles.unitContent}>
-                  <p className={styles.unitDescription}>{unit.description}</p>
-                </div>
-              )}
-              
-              <div className={styles.unitFooter}>
-                <div className={styles.unitStats}>
-                  <span className={styles.statItem}>
-                    {unit.resources?.length || 0} recursos
-                  </span>
-                  <span className={styles.statItem}>
-                    {unit.assignments?.length || 0} tareas
-                  </span>
-                </div>
-                <div className={styles.unitStatus}>
-                  <span className={`${styles.statusBadge} ${unit.status === 'ACTIVE' ? styles.active : styles.inactive}`}>
-                    {unit.status === 'ACTIVE' ? 'Activa' : 'Inactiva'}
-                  </span>
-                </div>
-              </div>
             </Card>
           ))}
         </div>
+      ) : (
+        <div className={styles.emptyState}>
+          <p className={styles.emptyMessage}>No hay unidades disponibles</p>
+        </div>
       )}
 
-      {/* Unit Form Modal */}
       <Modal
-        isOpen={showUnitModal}
-        onClose={handleCloseUnitModal}
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
         title={editingUnit ? 'Editar Unidad' : 'Nueva Unidad'}
-        size="medium"
       >
-        <form onSubmit={handleSubmitUnit} className={styles.unitForm}>
-          <div className={styles.formGroup}>
-            <Input
-              label="Título de la Unidad"
-              type="text"
-              name="title"
-              value={unitForm.title}
-              onChange={handleUnitFormChange}
-              error={unitErrors.title}
-              required
-              fullWidth
-              placeholder="ej: Introducción a los Conceptos Básicos"
-            />
-          </div>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <Input
+            label="Título de la Unidad"
+            name="title"
+            value={formData.title}
+            onChange={handleFormChange}
+            required
+            placeholder="Título de la unidad"
+          />
 
-          <div className={styles.formGroup}>
-            <Input
-              label="Orden"
-              type="number"
-              name="unitOrder"
-              value={unitForm.unitOrder}
-              onChange={handleUnitFormChange}
-              error={unitErrors.unitOrder}
-              required
-              min="1"
-              fullWidth
-            />
-          </div>
+          <Input
+            label="Descripción"
+            type="textarea"
+            name="description"
+            value={formData.description}
+            onChange={handleFormChange}
+            placeholder="Descripción de la unidad"
+            rows="4"
+          />
 
-          <div className={styles.formGroup}>
-            <label className={styles.formLabel}>Descripción</label>
-            <textarea
-              name="description"
-              value={unitForm.description}
-              onChange={handleUnitFormChange}
-              className={styles.textarea}
-              rows="4"
-              placeholder="Describe el contenido y objetivos de esta unidad..."
-            />
-          </div>
+          <Input
+            label="Orden"
+            type="number"
+            name="unitOrder"
+            value={formData.unitOrder}
+            onChange={handleFormChange}
+            min="1"
+            required
+          />
 
           <div className={styles.modalActions}>
             <Button
               type="button"
-              variant="outline"
-              onClick={handleCloseUnitModal}
+              variant="ghost"
+              onClick={() => setShowModal(false)}
             >
               Cancelar
             </Button>
             <Button
               type="submit"
               variant="primary"
-              loading={createUnitMutation.isLoading || updateUnitMutation.isLoading}
+              loading={formLoading}
             >
-              {editingUnit ? 'Actualizar' : 'Crear'} Unidad
+              {editingUnit ? 'Actualizar' : 'Crear'}
             </Button>
           </div>
         </form>
-      </Modal>
-
-      {/* Delete Confirmation Modal */}
-      <Modal
-        isOpen={showDeleteModal}
-        onClose={() => setShowDeleteModal(false)}
-        title="Confirmar Eliminación"
-        size="small"
-      >
-        <div className={styles.deleteConfirmation}>
-          <p>¿Estás seguro de que deseas eliminar la unidad "{deletingUnit?.title}"?</p>
-          <p className={styles.deleteWarning}>
-            Esta acción eliminará todo el contenido asociado a la unidad y no se puede deshacer.
-          </p>
-          <div className={styles.modalActions}>
-            <Button
-              variant="outline"
-              onClick={() => setShowDeleteModal(false)}
-            >
-              Cancelar
-            </Button>
-            <Button
-              variant="danger"
-              onClick={confirmDeleteUnit}
-              loading={deleteUnitMutation.isLoading}
-            >
-              Eliminar Unidad
-            </Button>
-          </div>
-        </div>
       </Modal>
     </div>
   );
