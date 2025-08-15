@@ -1,155 +1,133 @@
-.container {
-  padding: var(--spacing-lg);
-}
+import React, { useState, useEffect } from 'react';
+import Calendar from 'react-calendar';
+import EventCard from '../EventCard/EventCard';
+import Loading from '../../common/Loading/Loading';
+import Button from '../../common/Button/Button';
+import calendarService from '../../../services/calendarService';
+import useAuth from '../../../hooks/useAuth';
+import { formatDate, getStartOfMonth, getEndOfMonth } from '../../../utils/dateUtils';
+import styles from './Calendar.module.css';
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-xl);
-}
+const CalendarComponent = () => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [events, setEvents] = useState([]);
+  const [selectedDateEvents, setSelectedDateEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { hasRole } = useAuth();
 
-.title {
-  margin: 0;
-  color: var(--text-primary);
-  font-size: var(--font-size-2xl);
-  font-weight: 600;
-}
+  useEffect(() => {
+    fetchEvents();
+  }, [selectedDate]);
 
-.actions {
-  display: flex;
-  gap: var(--spacing-sm);
-}
+  useEffect(() => {
+    filterEventsByDate();
+  }, [events, selectedDate]);
 
-.calendarContainer {
-  display: grid;
-  grid-template-columns: 1fr 350px;
-  gap: var(--spacing-lg);
-}
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      const startDate = getStartOfMonth(selectedDate);
+      const endDate = getEndOfMonth(selectedDate);
+      
+      const eventsData = await calendarService.getEventsByDate(
+        startDate.toISOString(),
+        endDate.toISOString()
+      );
+      
+      setEvents(eventsData);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-.calendar {
-  background-color: var(--bg-paper);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-lg);
-  box-shadow: var(--shadow-1);
-}
+  const filterEventsByDate = () => {
+    const dateString = formatDate(selectedDate);
+    const dayEvents = events.filter(event => {
+      const eventDate = formatDate(new Date(event.startDatetime));
+      return eventDate === dateString;
+    });
+    setSelectedDateEvents(dayEvents);
+  };
 
-.reactCalendar {
-  width: 100%;
-  border: none;
-  font-family: inherit;
-}
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
 
-.reactCalendar .react-calendar__tile {
-  position: relative;
-  padding: var(--spacing-sm);
-  background: none;
-  border: none;
-  border-radius: var(--border-radius-sm);
-  transition: var(--transition-fast);
-}
+  const tileContent = ({ date, view }) => {
+    if (view === 'month') {
+      const dateString = formatDate(date);
+      const dayEvents = events.filter(event => {
+        const eventDate = formatDate(new Date(event.startDatetime));
+        return eventDate === dateString;
+      });
 
-.reactCalendar .react-calendar__tile:hover {
-  background-color: var(--bg-secondary);
-}
+      if (dayEvents.length > 0) {
+        return (
+          <div className={styles.eventDots}>
+            {dayEvents.slice(0, 3).map((event, index) => (
+              <div
+                key={index}
+                className={`${styles.eventDot} ${styles[event.eventType?.toLowerCase()]}`}
+              />
+            ))}
+            {dayEvents.length > 3 && (
+              <div className={styles.moreEvents}>+{dayEvents.length - 3}</div>
+            )}
+          </div>
+        );
+      }
+    }
+    return null;
+  };
 
-.reactCalendar .react-calendar__tile--active {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-.reactCalendar .react-calendar__tile--now {
-  background-color: var(--info-color);
-  color: white;
-}
-
-.eventDots {
-  display: flex;
-  justify-content: center;
-  gap: 2px;
-  margin-top: 2px;
-}
-
-.eventDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: var(--primary-color);
-}
-
-.eventDot.class {
-  background-color: var(--success-color);
-}
-
-.eventDot.exam {
-  background-color: var(--error-color);
-}
-
-.eventDot.assignment_due {
-  background-color: var(--warning-color);
-}
-
-.eventDot.meeting {
-  background-color: var(--info-color);
-}
-
-.moreEvents {
-  font-size: 8px;
-  color: var(--text-secondary);
-  margin-left: 2px;
-}
-
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.selectedDate {
-  background-color: var(--bg-paper);
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-1);
-  text-align: center;
-}
-
-.selectedDate h3 {
-  margin: 0;
-  color: var(--text-primary);
-  font-size: var(--font-size-lg);
-}
-
-.dayEvents {
-  background-color: var(--bg-paper);
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-1);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.noEvents {
-  text-align: center;
-  color: var(--text-secondary);
-  font-style: italic;
-  margin: 0;
-}
-
-@media (max-width: 768px) {
-  .container {
-    padding: var(--spacing-md);
+  if (loading) {
+    return <Loading message="Cargando calendario..." />;
   }
-  
-  .calendarContainer {
-    grid-template-columns: 1fr;
-  }
-  
-  .header {
-    flex-direction: column;
-    gap: var(--spacing-md);
-    align-items: stretch;
-  }
-}
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h2 className={styles.title}>Calendario Académico</h2>
+        <div className={styles.actions}>
+          {hasRole('INSTRUCTOR') && (
+            <Button variant="primary">
+              Nuevo Evento
+            </Button>
+          )}
+        </div>
+      </div>
+
+      <div className={styles.calendarContainer}>
+        <div className={styles.calendar}>
+          <Calendar
+            onChange={handleDateChange}
+            value={selectedDate}
+            tileContent={tileContent}
+            className={styles.reactCalendar}
+            locale="es-ES"
+          />
+        </div>
+
+        <div className={styles.sidebar}>
+          <div className={styles.selectedDate}>
+            <h3>{formatDate(selectedDate)}</h3>
+          </div>
+
+          <div className={styles.dayEvents}>
+            {selectedDateEvents.length > 0 ? (
+              selectedDateEvents.map(event => (
+                <EventCard key={event.id} event={event} compact />
+              ))
+            ) : (
+              <p className={styles.noEvents}>No hay eventos para este día</p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CalendarComponent;
