@@ -1,373 +1,210 @@
-import React, { useState, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery, useMutation } from 'react-query';
-import { useDropzone } from 'react-dropzone';
-import { useAuth } from '../../../context/AuthContext';
-import Button from '../../common/Button/Button';
+import React, { useState, useEffect } from 'react';
 import Card from '../../common/Card/Card';
+import Button from '../../common/Button/Button';
+import Input from '../../common/Input/Input';
 import Loading from '../../common/Loading/Loading';
-import { FaArrowLeft, FaUpload, FaFileAlt, FaTimes, FaCalendarAlt, FaClock } from 'react-icons/fa';
-import { assignmentService } from '../../../services/assignmentService';
-import { toast } from 'react-toastify';
+import useAuth from '../../../hooks/useAuth';
+import assignmentService from '../../../services/assignmentService';
+import useNotification from '../../../hooks/useNotification';
+import { formatDateTime } from '../../../utils/dateUtils';
+import { formatFileSize } from '../../../utils/formatters';
 import styles from './AssignmentSubmission.module.css';
 
-const AssignmentSubmission = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { user } = useAuth();
-  
+const AssignmentSubmission = ({ assignmentId, assignment }) => {
+  const [submission, setSubmission] = useState(null);
   const [submissionText, setSubmissionText] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const { user } = useAuth();
+  const { showError, showSuccess } = useNotification();
 
-  const { data: assignment, isLoading } = useQuery(
-    ['assignment', id],
-    () => assignmentService.getAssignmentById(id),
-    {
-      onError: (error) => {
-        toast.error('Error al cargar la tarea');
-        navigate('/assignments');
+  useEffect(() => {
+    fetchSubmission();
+  }, [assignmentId, user]);
+
+  const fetchSubmission = async () => {
+    try {
+      setLoading(true);
+      const submissionData = await assignmentService.getStudentSubmission(assignmentId, user.id);
+      setSubmission(submissionData);
+      if (submissionData) {
+        setSubmissionText(submissionData.submissionText || '');
       }
-    }
-  );
-
-  const { data: existingSubmission } = useQuery(
-    ['assignment-submission', id, user?.id],
-    () => assignmentService.getStudentSubmission(id, user?.id),
-    {
-      enabled: !!assignment && !!user?.id
-    }
-  );
-
-  const submitAssignmentMutation = useMutation(
-    (submissionData) => assignmentService.submitAssignment(id, submissionData),
-    {
-      onSuccess: () => {
-        toast.success('Tarea entregada exitosamente');
-        navigate('/assignments');
-      },
-      onError: (error) => {
-        toast.error('Error al entregar la tarea');
+    } catch (error) {
+      if (error.response?.status !== 404) {
+        console.error('Error fetching submission:', error);
       }
+    } finally {
+      setLoading(false);
     }
-  );
+  };
 
-  const onDrop = useCallback((acceptedFiles) => {
-    const file = acceptedFiles[0];
-    if (file) {
-      // Validate file size
-      if (file.size > assignment.maxFileSize) {
-        toast.error(`El archivo es demasiado grande. Máximo permitido: ${(assignment.maxFileSize / (1024 * 1024)).toFixed(1)}MB`);
-        return;
-      }
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-      // Validate file extension
-      const fileExtension = file.name.split('.').pop().toLowerCase();
-      const allowedExtensions = assignment.allowedExtensions.split(',').map(ext => ext.trim().toLowerCase());
-      
-      if (!allowedExtensions.includes(fileExtension)) {
-        toast.error(`Tipo de archivo no permitido. Extensiones permitidas: ${assignment.allowedExtensions}`);
-        return;
-      }
-
-      setSelectedFile(file);
+    // Validar tamaño
+    if (file.size > assignment.maxFileSize) {
+      showError(`El archivo es muy grande. Tamaño máximo: ${formatFileSize(assignment.maxFileSize)}`);
+      return;
     }
-  }, [assignment]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    multiple: false,
-    disabled: existingSubmission || new Date() > new Date(assignment?.dueDate)
-  });
+    // Validar extensión
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+    const allowedExtensions = assignment.allowedExtensions?.split(',') || [];
+    if (allowedExtensions.length > 0 && !allowedExtensions.includes(fileExtension)) {
+      showError(`Extensión no permitida. Extensiones válidas: ${allowedExtensions.join(', ')}`);
+      return;
+    }
 
-  const handleRemoveFile = () => {
-    setSelectedFile(null);
+    setSelectedFile(file);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!assignment) return;
 
-    // Validate submission based on type
-    if (assignment.submissionType === 'FILE' && !selectedFile) {
-      toast.error('Debe adjuntar un archivo');
+    if (assignment.submissionType === 'FILE' && !selectedFile && !submission?.fileUrl) {
+      showError('Debe seleccionar un archivo');
       return;
     }
 
     if (assignment.submissionType === 'TEXT' && !submissionText.trim()) {
-      toast.error('Debe escribir una respuesta');
+      showError('Debe ingresar el texto de la entrega');
       return;
     }
 
-    if (assignment.submissionType === 'BOTH' && !selectedFile && !submissionText.trim()) {
-      toast.error('Debe adjuntar un archivo o escribir una respuesta');
+    if (assignment.submissionType === 'BOTH' && !submissionText.trim() && (!selectedFile && !submission?.fileUrl)) {
+      showError('Debe proporcionar texto y/o archivo');
       return;
     }
 
-    setIsSubmitting(true);
-
+    setSubmitting(true);
     try {
-      const formData = new FormData();
-      formData.append('studentId', user.id);
-      
-      if (submissionText.trim()) {
-        formData.append('submissionText', submissionText);
-      }
-      
-      if (selectedFile) {
-        formData.append('file', selectedFile);
+      const submissionData = {
+        submissionText: submissionText.trim(),
+        file: selectedFile
+      };
+
+      if (submission) {
+        await assignmentService.updateSubmission(assignmentId, submission.id, submissionData);
+        showSuccess('Entrega actualizada exitosamente');
+      } else {
+        await assignmentService.createSubmission(assignmentId, submissionData);
+        showSuccess('Entrega enviada exitosamente');
       }
 
-      await submitAssignmentMutation.mutateAsync(formData);
+      fetchSubmission();
+      setSelectedFile(null);
     } catch (error) {
-      console.error('Submission error:', error);
+      const message = error?.response?.data?.message || 'Error al enviar la entrega';
+      showError(message);
     } finally {
-      setIsSubmitting(false);
+      setSubmitting(false);
     }
   };
 
-  const handleBack = () => {
-    navigate('/assignments');
-  };
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const formatFileSize = (bytes) => {
-    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-  };
-
-  const isOverdue = assignment && new Date() > new Date(assignment.dueDate);
-  const canSubmit = assignment && !existingSubmission && !isOverdue && assignment.status === 'ACTIVE';
-
-  if (isLoading) {
-    return <Loading text="Cargando tarea..." />;
+  if (loading) {
+    return <Loading message="Cargando entrega..." />;
   }
 
-  if (!assignment) {
-    return (
-      <div className={styles.notFound}>
-        <h2>Tarea no encontrada</h2>
-        <p>La tarea que buscas no existe o no tienes permisos para verla.</p>
-        <Button variant="primary" onClick={handleBack}>
-          Volver a Tareas
-        </Button>
-      </div>
-    );
-  }
+  const isSubmitted = !!submission;
+  const isGraded = submission?.status === 'GRADED';
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Button
-          variant="ghost"
-          icon={<FaArrowLeft />}
-          onClick={handleBack}
-        >
-          Volver
-        </Button>
-        <h1 className={styles.title}>Entregar Tarea</h1>
-      </div>
-
-      <div className={styles.content}>
-        <Card title="Información de la Tarea" className={styles.assignmentInfo}>
-          <div className={styles.assignmentDetails}>
-            <h3 className={styles.assignmentTitle}>{assignment.title}</h3>
-            <p className={styles.courseName}>{assignment.course?.name}</p>
+      <Card title="Mi Entrega">
+        {isSubmitted && (
+          <div className={styles.submissionInfo}>
+            <div className={styles.statusBadge}>
+              <span className={`${styles.status} ${styles[submission.status?.toLowerCase()]}`}>
+                {submission.status === 'SUBMITTED' ? 'Entregado' : 
+                 submission.status === 'GRADED' ? 'Calificado' : 
+                 submission.status === 'LATE' ? 'Entrega tardía' : submission.status}
+              </span>
+            </div>
             
-            <div className={styles.assignmentMeta}>
-              <div className={styles.metaItem}>
-                <FaCalendarAlt className={styles.metaIcon} />
-                <span>Vence: {formatDate(assignment.dueDate)}</span>
-              </div>
-              <div className={styles.metaItem}>
-                <FaClock className={styles.metaIcon} />
-                <span>{assignment.maxPoints} puntos</span>
-              </div>
+            <div className={styles.submissionMeta}>
+              <p><strong>Fecha de entrega:</strong> {formatDateTime(submission.submissionDate)}</p>
+              {isGraded && (
+                <>
+                  <p><strong>Calificación:</strong> {submission.grade}/{assignment.maxPoints}</p>
+                  <p><strong>Calificado el:</strong> {formatDateTime(submission.gradedAt)}</p>
+                </>
+              )}
             </div>
 
-            {assignment.description && (
-              <div className={styles.description}>
-                <h4>Descripción:</h4>
-                <p>{assignment.description}</p>
-              </div>
-            )}
-
-            {assignment.instructions && (
-              <div className={styles.instructions}>
-                <h4>Instrucciones:</h4>
-                <div className={styles.instructionsContent}>
-                  {assignment.instructions.split('\n').map((line, index) => (
-                    <p key={index}>{line}</p>
-                  ))}
-                </div>
+            {submission.feedback && (
+              <div className={styles.feedback}>
+                <h4>Retroalimentación del Instructor:</h4>
+                <p>{submission.feedback}</p>
               </div>
             )}
           </div>
-        </Card>
-
-        {existingSubmission ? (
-          <Card title="Tu Entrega" className={styles.existingSubmission}>
-            <div className={styles.submissionDetails}>
-              <div className={styles.submissionStatus}>
-                <h4>Estado: Entregada</h4>
-                <p>Entregado el: {formatDate(existingSubmission.submissionDate)}</p>
-                {existingSubmission.grade !== null && (
-                  <div className={styles.gradeInfo}>
-                    <span className={styles.grade}>
-                      Calificación: {existingSubmission.grade}/{assignment.maxPoints}
-                    </span>
-                    {existingSubmission.feedback && (
-                      <div className={styles.feedback}>
-                        <h5>Comentarios del instructor:</h5>
-                        <p>{existingSubmission.feedback}</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {existingSubmission.submissionText && (
-                <div className={styles.submissionText}>
-                  <h5>Texto de la entrega:</h5>
-                  <div className={styles.textContent}>
-                    {existingSubmission.submissionText}
-                  </div>
-                </div>
-              )}
-
-              {existingSubmission.fileName && (
-                <div className={styles.submissionFile}>
-                  <h5>Archivo entregado:</h5>
-                  <div className={styles.fileInfo}>
-                    <FaFileAlt className={styles.fileIcon} />
-                    <span>{existingSubmission.fileName}</span>
-                    <a 
-                      href={existingSubmission.fileUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className={styles.downloadLink}
-                    >
-                      Descargar
-                    </a>
-                  </div>
-                </div>
-              )}
-            </div>
-          </Card>
-        ) : isOverdue ? (
-          <Card title="Entrega No Disponible" className={styles.overdueNotice}>
-            <div className={styles.overdueContent}>
-              <h4>Tarea Vencida</h4>
-              <p>La fecha límite para entregar esta tarea ya ha pasado.</p>
-              <p>Fecha de vencimiento: {formatDate(assignment.dueDate)}</p>
-            </div>
-          </Card>
-        ) : !canSubmit ? (
-          <Card title="Entrega No Disponible" className={styles.unavailableNotice}>
-            <div className={styles.unavailableContent}>
-              <h4>Entrega No Disponible</h4>
-              <p>Esta tarea no está disponible para entrega en este momento.</p>
-            </div>
-          </Card>
-        ) : (
-          <Card title="Realizar Entrega" className={styles.submissionForm}>
-            <form onSubmit={handleSubmit}>
-              {(assignment.submissionType === 'TEXT' || assignment.submissionType === 'BOTH') && (
-                <div className={styles.textSubmission}>
-                  <label className={styles.label}>
-                    Respuesta {assignment.submissionType === 'TEXT' ? '*' : '(opcional)'}
-                  </label>
-                  <textarea
-                    value={submissionText}
-                    onChange={(e) => setSubmissionText(e.target.value)}
-                    className={styles.textarea}
-                    rows="8"
-                    placeholder="Escribe tu respuesta aquí..."
-                    required={assignment.submissionType === 'TEXT'}
-                  />
-                </div>
-              )}
-
-              {(assignment.submissionType === 'FILE' || assignment.submissionType === 'BOTH') && (
-                <div className={styles.fileSubmission}>
-                  <label className={styles.label}>
-                    Archivo {assignment.submissionType === 'FILE' ? '*' : '(opcional)'}
-                  </label>
-                  
-                  <div className={styles.fileUploadSection}>
-                    <div
-                      {...getRootProps()}
-                      className={`${styles.dropzone} ${isDragActive ? styles.active : ''} ${selectedFile ? styles.hasFile : ''}`}
-                    >
-                      <input {...getInputProps()} />
-                      {selectedFile ? (
-                        <div className={styles.selectedFile}>
-                          <FaFileAlt className={styles.fileIcon} />
-                          <div className={styles.fileDetails}>
-                            <span className={styles.fileName}>{selectedFile.name}</span>
-                            <span className={styles.fileSize}>
-                              {formatFileSize(selectedFile.size)}
-                            </span>
-                          </div>
-                          <button
-                            type="button"
-                            className={styles.removeFile}
-                            onClick={handleRemoveFile}
-                          >
-                            <FaTimes />
-                          </button>
-                        </div>
-                      ) : (
-                        <div className={styles.dropzoneContent}>
-                          <FaUpload className={styles.uploadIcon} />
-                          <p>
-                            {isDragActive
-                              ? 'Suelta el archivo aquí...'
-                              : 'Arrastra un archivo aquí o haz clic para seleccionar'
-                            }
-                          </p>
-                          <div className={styles.fileConstraints}>
-                            <p>Extensiones permitidas: {assignment.allowedExtensions}</p>
-                            <p>Tamaño máximo: {formatFileSize(assignment.maxFileSize)}</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className={styles.submissionActions}>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleBack}
-                  disabled={isSubmitting}
-                >
-                  Cancelar
-                </Button>
-                <Button
-                  type="submit"
-                  variant="primary"
-                  icon={<FaUpload />}
-                  loading={isSubmitting}
-                >
-                  Entregar Tarea
-                </Button>
-              </div>
-            </form>
-          </Card>
         )}
-      </div>
+
+        <form onSubmit={handleSubmit} className={styles.form}>
+          {(assignment.submissionType === 'TEXT' || assignment.submissionType === 'BOTH') && (
+            <Input
+              label="Texto de la Entrega"
+              type="textarea"
+              value={submissionText}
+              onChange={(e) => setSubmissionText(e.target.value)}
+              placeholder="Escriba su entrega aquí..."
+              rows="8"
+              required={assignment.submissionType === 'TEXT'}
+            />
+          )}
+
+          {(assignment.submissionType === 'FILE' || assignment.submissionType === 'BOTH') && (
+            <div className={styles.fileSection}>
+              <label className={styles.fileLabel}>Archivo de Entrega:</label>
+              
+              {submission?.fileUrl && (
+                <div className={styles.currentFile}>
+                  <p><strong>Archivo actual:</strong> {submission.fileName}</p>
+                  <a 
+                    href={submission.fileUrl} 
+                    download 
+                    className={styles.downloadLink}
+                  >
+                    Descargar archivo
+                  </a>
+                </div>
+              )}
+
+              <input
+                type="file"
+                onChange={handleFileChange}
+                className={styles.fileInput}
+                accept={assignment.allowedExtensions?.split(',').map(ext => `.${ext}`).join(',')}
+              />
+              
+              {selectedFile && (
+                <div className={styles.selectedFile}>
+                  <p><strong>Archivo seleccionado:</strong> {selectedFile.name}</p>
+                  <p><strong>Tamaño:</strong> {formatFileSize(selectedFile.size)}</p>
+                </div>
+              )}
+
+              <div className={styles.fileInfo}>
+                <p><strong>Tamaño máximo:</strong> {formatFileSize(assignment.maxFileSize)}</p>
+                <p><strong>Extensiones permitidas:</strong> {assignment.allowedExtensions}</p>
+              </div>
+            </div>
+          )}
+
+          <div className={styles.actions}>
+            <Button
+              type="submit"
+              variant={isSubmitted ? "outline" : "primary"}
+              loading={submitting}
+            >
+              {isSubmitted ? 'Actualizar Entrega' : 'Enviar Entrega'}
+            </Button>
+          </div>
+        </form>
+      </Card>
     </div>
   );
 };
