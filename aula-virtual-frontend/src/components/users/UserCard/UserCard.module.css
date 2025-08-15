@@ -1,371 +1,182 @@
 .card {
-  background: var(--bg-primary);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color);
-  transition: var(--transition-normal);
-  overflow: hidden;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
-.card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-  border-color: var(--primary-color);
-}
-
-.cardHeader {
+.header {
   display: flex;
-  align-items: center;
   gap: var(--spacing-md);
-  padding: var(--spacing-lg);
-  background: var(--bg-secondary);
-  border-bottom: 1px solid var(--border-color);
+  margin-bottom: var(--spacing-md);
+  position: relative;
 }
 
 .userAvatar {
-  position: relative;
-  width: 64px;
-  height: 64px;
-  border-radius: var(--radius-full);
-  overflow: hidden;
   flex-shrink: 0;
-  background: var(--primary-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.userAvatar img {
-  width: 100%;
-  height: 100%;
+.avatarImage {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
   object-fit: cover;
 }
 
-.avatarInitials {
-  font-size: var(--font-size-xl);
-  font-weight: 700;
-  color: var(--text-white);
-}
-
-.roleIconOverlay {
-  position: absolute;
-  bottom: -2px;
-  right: -2px;
-  width: 24px;
-  height: 24px;
-  border-radius: var(--radius-full);
-  background: var(--bg-primary);
-  border: 2px solid var(--bg-primary);
+.avatarPlaceholder {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--font-size-sm);
-}
-
-.roleIconAdmin {
-  color: var(--danger-color);
-}
-
-.roleIconInstructor {
-  color: var(--warning-color);
-}
-
-.roleIconStudent {
-  color: var(--info-color);
-}
-
-.roleIconDefault {
-  color: var(--text-secondary);
+  color: white;
+  font-weight: 600;
+  font-size: var(--font-size-lg);
 }
 
 .userInfo {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
+  min-width: 0;
 }
 
 .userName {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
+  margin: 0 0 var(--spacing-xs) 0;
+  color: var(--text-primary);
   font-size: var(--font-size-lg);
   font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-  line-height: 1.4;
-}
-
-.currentUserIcon {
-  color: var(--warning-color);
-  font-size: var(--font-size-sm);
-}
-
-.userMeta {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
+  line-height: 1.2;
 }
 
 .userCode {
-  font-size: var(--font-size-sm);
+  margin: 0 0 var(--spacing-xs) 0;
   color: var(--text-secondary);
+  font-size: var(--font-size-sm);
   font-weight: 500;
-  font-family: 'Courier New', monospace;
 }
 
-.badges {
-  display: flex;
-  gap: var(--spacing-sm);
-  flex-wrap: wrap;
-}
-
-.roleBadge,
-.statusBadge {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.roleAdmin {
-  background: rgba(244, 67, 54, 0.1);
-  color: var(--danger-color);
-}
-
-.roleInstructor {
-  background: rgba(255, 152, 0, 0.1);
-  color: var(--warning-color);
-}
-
-.roleStudent {
-  background: rgba(33, 150, 243, 0.1);
-  color: var(--info-color);
-}
-
-.statusActive {
-  background: rgba(76, 175, 80, 0.1);
-  color: var(--success-color);
-}
-
-.statusInactive {
-  background: rgba(158, 158, 158, 0.1);
+.userEmail {
+  margin: 0;
   color: var(--text-secondary);
-}
-
-.statusPending {
-  background: rgba(255, 152, 0, 0.1);
-  color: var(--warning-color);
-}
-
-.statusSuspended {
-  background: rgba(244, 67, 54, 0.1);
-  color: var(--danger-color);
-}
-
-.cardContent {
-  flex: 1;
-  padding: var(--spacing-lg);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.contactInfo {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-}
-
-.contactItem {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
-
-.contactIcon {
-  color: var(--primary-color);
   font-size: var(--font-size-sm);
-  width: 16px;
-  flex-shrink: 0;
-}
-
-.contactText {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
   word-break: break-word;
 }
 
-.userBio {
-  padding: var(--spacing-md);
-  background: var(--bg-secondary);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
+.status {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
-.userBio p {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.status.success {
+  background-color: var(--success-color);
+  color: white;
 }
 
-.userStats {
-  display: flex;
-  justify-content: space-around;
-  padding: var(--spacing-md);
-  background: var(--bg-secondary);
-  border-radius: var(--radius-sm);
-  gap: var(--spacing-md);
+.status.warning {
+  background-color: var(--warning-color);
+  color: white;
 }
 
-.statItem {
+.status.error {
+  background-color: var(--error-color);
+  color: white;
+}
+
+.status.gray {
+  background-color: var(--text-disabled);
+  color: white;
+}
+
+.content {
+  flex: 1;
+  margin-bottom: var(--spacing-md);
+}
+
+.metadata {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  gap: var(--spacing-xs);
 }
 
-.statValue {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--text-primary);
-  line-height: 1;
-}
-
-.statLabel {
-  font-size: var(--font-size-xs);
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 500;
-}
-
-.lastLogin {
+.metadataItem {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--bg-secondary);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-sm);
+  align-items: flex-start;
+  gap: var(--spacing-sm);
 }
 
-.lastLoginLabel {
+.label {
   color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  min-width: 80px;
 }
 
-.lastLoginTime {
-  color: var(--text-primary);
+.roles {
+  text-align: right;
+  font-size: var(--font-size-xs);
+  color: var(--primary-color);
   font-weight: 500;
 }
 
-.cardFooter {
-  padding: var(--spacing-lg);
-  border-top: 1px solid var(--border-color);
-  background: var(--bg-secondary);
-}
-
-.actions {
+.footer {
   display: flex;
-  gap: var(--spacing-xs);
-  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: auto;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-color);
 }
 
-.deleteModal {
+.statusModal {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
 }
 
-.deleteWarning {
+.statusOptions {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  background: rgba(244, 67, 54, 0.1);
-  border: 1px solid var(--danger-color);
-  border-radius: var(--radius-md);
 }
 
-.warningIcon {
-  color: var(--danger-color);
-  font-size: var(--font-size-lg);
-}
-
-.deleteWarning h3 {
-  color: var(--danger-color);
-  margin: 0;
-}
-
-.deleteModal p {
-  margin: 0;
-  line-height: 1.6;
-}
-
-.deleteInfo {
-  padding: var(--spacing-md);
-  background: var(--bg-secondary);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-sm);
-}
-
-.deleteInfo strong {
-  color: var(--text-primary);
-}
-
-.deleteInfo ul {
-  margin: var(--spacing-sm) 0 0 0;
-  padding-left: var(--spacing-lg);
-}
-
-.deleteInfo li {
-  margin-bottom: var(--spacing-xs);
-  color: var(--text-secondary);
-}
-
-.deleteActions {
-  display: flex;
-  gap: var(--spacing-md);
-  justify-content: flex-end;
+.statusButton {
+  justify-content: flex-start;
+  text-align: left;
 }
 
 @media (max-width: 768px) {
-  .cardHeader {
+  .header {
     flex-direction: column;
     text-align: center;
   }
   
-  .userStats {
-    flex-direction: column;
-    gap: var(--spacing-sm);
+  .userAvatar {
+    align-self: center;
   }
   
-  .statItem {
-    flex-direction: row;
-    justify-content: space-between;
+  .status {
+    position: static;
+    align-self: center;
+    margin-top: var(--spacing-sm);
   }
   
-  .actions {
+  .metadataItem {
     flex-direction: column;
+    align-items: stretch;
+    gap: 0.25rem;
   }
   
-  .lastLogin {
-    flex-direction: column;
-    gap: var(--spacing-xs);
-    text-align: center;
+  .label {
+    min-width: auto;
   }
   
-  .deleteActions {
-    flex-direction: column;
+  .roles {
+    text-align: left;
   }
 }
