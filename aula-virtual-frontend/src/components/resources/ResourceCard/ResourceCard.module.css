@@ -1,382 +1,180 @@
-/* Grid Card Styles */
-.gridCard {
-  background: var(--bg-primary);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color);
-  transition: var(--transition-normal);
-  overflow: hidden;
+.card {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
-.gridCard:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-  border-color: var(--primary-color);
-}
-
-.cardHeader {
+.header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-md);
+}
+
+.fileInfo {
+  display: flex;
   align-items: center;
-  padding: var(--spacing-md);
-  background: var(--bg-secondary);
+  gap: var(--spacing-md);
+  flex: 1;
 }
 
 .fileIcon {
-  width: 40px;
-  height: 40px;
+  font-size: 2.5rem;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-md);
-  background: var(--bg-primary);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+  border: 2px solid var(--border-color);
 }
 
-.fileIconImage { color: #4CAF50; }
-.fileIconVideo { color: #2196F3; }
-.fileIconAudio { color: #FF5722; }
-.fileIconPdf { color: #F44336; }
-.fileIconDocument { color: #2196F3; }
-.fileIconSpreadsheet { color: #4CAF50; }
-.fileIconPresentation { color: #FF9800; }
-.fileIconArchive { color: #795548; }
-.fileIconOther { color: var(--text-secondary); }
-
-.cardActions {
-  display: flex;
-  gap: var(--spacing-xs);
-}
-
-.favoriteActive {
-  color: var(--danger-color);
-}
-
-.thumbnail {
-  position: relative;
-  width: 100%;
-  height: 160px;
-  overflow: hidden;
-}
-
-.thumbnail img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.thumbnailOverlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: var(--transition-fast);
-}
-
-.thumbnail:hover .thumbnailOverlay {
-  opacity: 1;
-}
-
-.cardContent {
-  display: flex;
-  flex-direction: column;
+.fileDetails {
   flex: 1;
-  padding: var(--spacing-lg);
+  min-width: 0;
 }
 
-.cardInfo {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-}
-
-.cardTitle {
-  font-size: var(--font-size-md);
-  font-weight: 600;
+.fileName {
+  margin: 0 0 var(--spacing-xs) 0;
   color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  line-height: 1.2;
+  word-wrap: break-word;
+}
+
+.originalFileName {
   margin: 0;
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.cardMeta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: var(--font-size-sm);
   color: var(--text-secondary);
-}
-
-.fileSize {
-  font-weight: 500;
-}
-
-.uploadDate {
-  font-weight: 400;
-}
-
-.cardDescription {
   font-size: var(--font-size-sm);
+  word-wrap: break-word;
+}
+
+.category {
+  padding: 0.25rem 0.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.content {
+  flex: 1;
+  margin-bottom: var(--spacing-md);
+}
+
+.description {
+  margin: 0 0 var(--spacing-md) 0;
   color: var(--text-secondary);
+  font-size: var(--font-size-sm);
   line-height: 1.5;
-  margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.categoryBadge {
-  align-self: flex-start;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  background: var(--primary-color);
-  color: var(--text-white);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.metadata {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
 }
 
-.cardFooter {
-  margin-top: var(--spacing-md);
+.metadataItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.label {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.tag {
+  padding: 0.125rem 0.5rem;
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  border: 1px solid var(--border-color);
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
   padding-top: var(--spacing-md);
   border-top: 1px solid var(--border-color);
 }
 
-.uploaderInfo {
+.footerLeft {
   display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
 }
 
-.uploaderAvatar {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-full);
-  background: var(--primary-color);
-  color: var(--text-white);
+.footerRight {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--font-size-sm);
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.uploaderAvatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.uploaderDetails {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
   gap: var(--spacing-xs);
 }
 
-.uploaderName {
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.resourceStats {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.downloadCount {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  font-size: var(--font-size-xs);
-  color: var(--text-secondary);
-}
-
-.cardActionsFooter {
-  display: flex;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-md);
-  background: var(--bg-secondary);
-  border-top: 1px solid var(--border-color);
-}
-
-/* List Card Styles */
-.listCard {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-lg);
-  padding: var(--spacing-lg);
-  background: var(--bg-primary);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color);
-  transition: var(--transition-fast);
-}
-
-.listCard:hover {
-  box-shadow: var(--shadow-md);
-  border-color: var(--primary-color);
-}
-
-.listFileIcon {
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-md);
-  background: var(--bg-secondary);
-  flex-shrink: 0;
-}
-
-.listContent {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-}
-
-.listHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--spacing-md);
-}
-
-.listTitle {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-  line-height: 1.4;
-}
-
-.listMeta {
-  display: flex;
-  gap: var(--spacing-md);
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-  flex-shrink: 0;
-}
-
-.listCategory {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  background: var(--primary-color);
-  color: var(--text-white);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-}
-
-.listDescription {
-  font-size: var(--font-size-md);
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.listFooter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.listUploader {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-}
-
-.uploaderIcon {
-  color: var(--primary-color);
-}
-
-.listStats {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.listActions {
-  display: flex;
-  gap: var(--spacing-xs);
-  flex-shrink: 0;
-}
-
-/* Modal Styles */
 .deleteModal {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
-}
-
-.deleteModal p {
-  margin: 0;
-  line-height: 1.6;
+  gap: var(--spacing-md);
 }
 
 .deleteWarning {
-  color: var(--danger-color);
-  font-size: var(--font-size-sm);
+  color: var(--error-color);
   font-weight: 500;
+  font-size: var(--font-size-sm);
 }
 
 .deleteActions {
   display: flex;
-  gap: var(--spacing-md);
   justify-content: flex-end;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
 }
 
 @media (max-width: 768px) {
-  .listCard {
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
-  }
-  
-  .listHeader {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .listMeta {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  
-  .listFooter {
+  .header {
     flex-direction: column;
     gap: var(--spacing-sm);
   }
   
-  .listActions {
-    justify-content: center;
-    flex-wrap: wrap;
+  .fileInfo {
+    width: 100%;
   }
   
-  .cardActionsFooter {
-    flex-wrap: wrap;
+  .category {
+    align-self: flex-start;
+  }
+  
+  .footer {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .footerLeft,
+  .footerRight {
+    width: 100%;
     justify-content: center;
   }
   
