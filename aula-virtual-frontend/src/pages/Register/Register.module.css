@@ -1,0 +1,129 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: linear-gradient(135deg, var(--success-color) 0%, var(--success-dark) 100%);
+  overflow: hidden;
+}
+
+.registerContainer {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 500px;
+  padding: var(--spacing-lg);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.title {
+  margin: 0 0 var(--spacing-sm) 0;
+  color: white;
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+}
+
+.subtitle {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: var(--font-size-base);
+}
+
+.registerCard {
+  box-shadow: var(--shadow-3);
+  border: none;
+}
+
+.footer {
+  text-align: center;
+  margin-top: var(--spacing-lg);
+}
+
+.footerText {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: var(--font-size-sm);
+}
+
+.link {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.shapes {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.shape1,
+.shape2,
+.shape3 {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  animation: float 6s ease-in-out infinite;
+}
+
+.shape1 {
+  width: 180px;
+  height: 180px;
+  top: 15%;
+  right: -8%;
+  animation-delay: 1s;
+}
+
+.shape2 {
+  width: 120px;
+  height: 120px;
+  top: 60%;
+  left: -6%;
+  animation-delay: 3s;
+}
+
+.shape3 {
+  width: 160px;
+  height: 160px;
+  top: 80%;
+  right: 70%;
+  animation-delay: 5s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(180deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .registerContainer {
+    max-width: none;
+    margin: var(--spacing-md);
+  }
+  
+  .title {
+    font-size: var(--font-size-2xl);
+  }
+}
