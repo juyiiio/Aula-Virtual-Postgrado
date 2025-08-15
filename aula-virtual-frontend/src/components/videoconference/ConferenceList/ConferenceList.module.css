@@ -1,0 +1,92 @@
+.container {
+  padding: var(--spacing-lg);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.title {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.filters {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+  align-items: center;
+}
+
+.searchInput {
+  flex: 1;
+  max-width: 400px;
+}
+
+.filterSelect {
+  padding: 0.75rem;
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  min-width: 150px;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+}
+
+.conferenceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.emptyState {
+  text-align: center;
+  padding: var(--spacing-2xl);
+}
+
+.emptyMessage {
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-md);
+  }
+  
+  .header {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: stretch;
+  }
+  
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .searchInput {
+    max-width: none;
+  }
+  
+  .conferenceGrid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}
