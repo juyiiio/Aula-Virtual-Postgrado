@@ -1,40 +1,67 @@
-.card {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+.container {
+  padding: var(--spacing-lg);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.conferenceCard {
+  background: linear-gradient(135deg, var(--bg-paper) 0%, var(--bg-secondary) 100%);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-2);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 .conferenceInfo {
   flex: 1;
 }
 
-.conferenceTitle {
-  margin: 0 0 var(--spacing-xs) 0;
+.title {
+  margin: 0 0 var(--spacing-sm) 0;
   color: var(--text-primary);
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-2xl);
   font-weight: 600;
-  line-height: 1.2;
 }
 
-.courseName {
-  margin: 0;
+.description {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.metadata {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.metadata span {
   color: var(--text-secondary);
   font-size: var(--font-size-sm);
 }
 
+.host {
+  font-weight: 500;
+}
+
+.statusBadge {
+  display: flex;
+  align-items: center;
+}
+
 .status {
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--border-radius-sm);
-  font-size: var(--font-size-xs);
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius-full);
+  font-size: var(--font-size-sm);
   font-weight: 600;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
 }
 
 .status.live {
@@ -54,49 +81,110 @@
 }
 
 @keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.7; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
-.content {
-  flex: 1;
-  margin-bottom: var(--spacing-md);
+.controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-lg);
 }
 
-.description {
-  margin: 0 0 var(--spacing-md) 0;
+.joinButton {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  box-shadow: var(--shadow-2);
+  transition: all var(--transition-base);
+}
+
+.joinButton:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-3);
+}
+
+.leaveButton {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+.scheduledMessage {
+  text-align: center;
+  padding: var(--spacing-lg);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.scheduledMessage p {
+  margin: 0;
   color: var(--text-secondary);
-  font-size: var(--font-size-sm);
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: var(--font-size-lg);
 }
 
-.metadata {
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+}
+
+.feature {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
-}
-
-.metadataItem {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+  transition: var(--transition-base);
 }
 
-.label {
-  color: var(--text-secondary);
-  font-size: var(--font-size-xs);
-  font-weight: 500;
+.feature:hover {
+  background-color: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
 }
 
-.footer {
+.featureIcon {
+  font-size: var(--font-size-xl);
+}
+
+.error {
   display: flex;
-  gap: var(--spacing-sm);
-  margin-top: auto;
-  padding-top: var(--spacing-md);
-  border-top: 1px solid var(--border-color);
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: var(--error-color);
+  font-size: var(--font-size-lg);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-md);
+  }
+  
+  .header {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .metadata {
+    gap: var(--spacing-sm);
+  }
+  
+  .features {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: var(--spacing-sm);
+  }
 }
