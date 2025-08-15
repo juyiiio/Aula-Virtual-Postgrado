@@ -1,539 +1,229 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xl);
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: var(--spacing-lg);
 }
 
-.header {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-lg);
-}
-
-.headerContent {
-  flex: 1;
-}
-
-.title {
-  font-size: var(--font-size-xxl);
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 var(--spacing-sm) 0;
-  line-height: 1.3;
-}
-
-.courseName {
-  font-size: var(--font-size-lg);
-  color: var(--primary-color);
-  font-weight: 500;
-  margin: 0;
-}
-
-.assignmentSummary {
-  display: flex;
-  flex-direction: column;
-}
-
-.summaryGrid {
+.layout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: 350px 1fr;
   gap: var(--spacing-lg);
+  height: calc(100vh - 200px);
 }
 
-.summaryItem {
+.sidebar {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
-}
-
-.summaryLabel {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.summaryValue {
-  font-size: var(--font-size-md);
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
-.statsSection {
-  display: flex;
-  flex-direction: column;
-}
-
-.statsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: var(--spacing-lg);
-  text-align: center;
-}
-
-.statItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
-
-.statValue {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.statValue.graded {
-  color: var(--success-color);
-}
-
-.statValue.ungraded {
-  color: var(--warning-color);
-}
-
-.statValue.late {
-  color: var(--danger-color);
-}
-
-.statLabel {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.submissionsSection {
-  display: flex;
-  flex-direction: column;
-}
-
-.submissionsHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-lg);
-  flex-wrap: wrap;
-  gap: var(--spacing-md);
-}
-
-.submissionsHeader h3 {
-  font-size: var(--font-size-xl);
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.filters {
-  display: flex;
-  gap: var(--spacing-sm);
-  flex-wrap: wrap;
-}
-
-.filterButton {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid var(--border-color);
-  background: var(--bg-primary);
-  color: var(--text-secondary);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  cursor: pointer;
-  transition: var(--transition-fast);
-  white-space: nowrap;
-}
-
-.filterButton:hover {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-}
-
-.filterButton.active {
-  background: var(--primary-color);
-  color: var(--text-white);
-  border-color: var(--primary-color);
-}
-
-.emptyState {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-xxl);
-  text-align: center;
-  gap: var(--spacing-lg);
-  color: var(--text-secondary);
-}
-
-.emptyIcon {
-  font-size: 3rem;
-}
-
-.emptyState h4 {
-  font-size: var(--font-size-lg);
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.emptyState p {
-  margin: 0;
-  max-width: 400px;
 }
 
 .submissionsList {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-sm);
+  max-height: 600px;
+  overflow-y: auto;
 }
 
-.submissionCard {
+.submissionItem {
+  padding: var(--spacing-md);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  transition: var(--transition-fast);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: var(--transition-base);
 }
 
-.submissionCard:hover {
+.submissionItem:hover {
+  background-color: var(--bg-secondary);
   border-color: var(--primary-color);
-  box-shadow: var(--shadow-sm);
 }
 
-.submissionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: var(--spacing-md);
-  gap: var(--spacing-md);
+.submissionItem.selected {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
 }
 
 .studentInfo {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.studentAvatar {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-full);
-  background: var(--primary-color);
-  color: var(--text-white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--font-size-lg);
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.studentAvatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.studentDetails {
-  display: flex;
-  flex-direction: column;
+  margin-bottom: var(--spacing-sm);
 }
 
 .studentName {
-  font-size: var(--font-size-lg);
+  margin: 0 0 0.25rem 0;
+  font-size: var(--font-size-base);
   font-weight: 600;
-  color: var(--text-primary);
-  margin: 0 0 var(--spacing-xs) 0;
 }
 
 .studentCode {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
   margin: 0;
-}
-
-.submissionMeta {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: var(--spacing-sm);
-}
-
-.submissionDate {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
   font-size: var(--font-size-sm);
-  color: var(--text-secondary);
+  opacity: 0.8;
 }
 
-.metaIcon {
-  font-size: var(--font-size-xs);
+.submissionStatus {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.lateTag {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  background: rgba(244, 67, 54, 0.1);
-  color: var(--danger-color);
-  border-radius: var(--radius-sm);
+.status {
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius-sm);
   font-size: var(--font-size-xs);
   font-weight: 600;
   text-transform: uppercase;
 }
 
-.gradeTag {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  background: rgba(76, 175, 80, 0.1);
-  color: var(--success-color);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-sm);
-  font-weight: 600;
+.status.submitted {
+  background-color: var(--info-color);
+  color: white;
 }
 
-.submissionContent {
+.status.graded {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.status.late {
+  background-color: var(--warning-color);
+  color: white;
+}
+
+.grade {
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+}
+
+.mainContent {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-md);
+  overflow-y: auto;
 }
 
-.textSubmission h5,
-.fileSubmission h5,
-.existingFeedback h5 {
-  font-size: var(--font-size-md);
+.submissionDetail {
+  flex: 1;
+}
+
+.submissionHeader {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.studentDetails h3 {
+  margin: 0 0 var(--spacing-xs) 0;
   color: var(--text-primary);
-  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.studentDetails p {
+  margin: 0 0 var(--spacing-xs) 0;
+  color: var(--text-secondary);
+}
+
+.submissionMeta p {
+  margin: 0 0 var(--spacing-xs) 0;
+  color: var(--text-primary);
+}
+
+.textSubmission {
+  margin-bottom: var(--spacing-lg);
+}
+
+.textSubmission h4 {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--text-primary);
 }
 
 .textContent {
   padding: var(--spacing-md);
-  background: var(--bg-secondary);
-  border-radius: var(--radius-sm);
-  color: var(--text-secondary);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
   line-height: 1.6;
-  font-style: italic;
-}
-
-.fileInfo {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--spacing-md);
-  background: var(--bg-secondary);
-  border-radius: var(--radius-sm);
-}
-
-.fileDetails {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
-
-.fileIcon {
-  color: var(--primary-color);
-  font-size: var(--font-size-lg);
-}
-
-.existingFeedback p {
-  padding: var(--spacing-md);
-  background: var(--bg-secondary);
-  border-radius: var(--radius-sm);
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin: 0;
-}
-
-.submissionActions {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--spacing-sm);
-  padding-top: var(--spacing-md);
-  border-top: 1px solid var(--border-color);
-}
-
-.gradeModal {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xl);
-}
-
-.submissionPreview {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
-  padding: var(--spacing-lg);
-  background: var(--bg-secondary);
-  border-radius: var(--radius-md);
-}
-
-.studentInfoModal {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.studentInfoModal h4 {
-  font-size: var(--font-size-lg);
-  color: var(--text-primary);
-  margin: 0 0 var(--spacing-xs) 0;
-}
-
-.studentInfoModal p {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-  margin: 0;
-}
-
-.modalTextSubmission h5,
-.modalFileSubmission h5 {
-  font-size: var(--font-size-md);
-  color: var(--text-primary);
-  margin: 0 0 var(--spacing-sm) 0;
-}
-
-.modalTextContent {
-  padding: var(--spacing-md);
-  background: var(--bg-primary);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
-  color: var(--text-secondary);
-  line-height: 1.6;
-  max-height: 200px;
-  overflow-y: auto;
   white-space: pre-wrap;
 }
 
-.gradeForm {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
+.fileSubmission {
+  margin-bottom: var(--spacing-lg);
 }
 
-.gradeInputSection {
-  display: flex;
-  flex-direction: column;
-}
-
-.feedbackSection {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-}
-
-.feedbackLabel {
-  font-size: var(--font-size-md);
-  font-weight: 500;
+.fileSubmission h4 {
+  margin: 0 0 var(--spacing-md) 0;
   color: var(--text-primary);
 }
 
-.feedbackTextarea {
-  width: 100%;
+.fileInfo {
   padding: var(--spacing-md);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-md);
-  font-family: inherit;
-  background: var(--bg-primary);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+}
+
+.fileInfo p {
+  margin: 0 0 var(--spacing-sm) 0;
   color: var(--text-primary);
-  resize: vertical;
-  transition: var(--transition-fast);
 }
 
-.feedbackTextarea:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+.downloadLink {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
 }
 
-.feedbackTextarea::placeholder {
-  color: var(--text-secondary);
+.downloadLink:hover {
+  text-decoration: underline;
 }
 
-.modalActions {
+.gradingForm {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
   gap: var(--spacing-md);
   padding-top: var(--spacing-lg);
   border-top: 1px solid var(--border-color);
 }
 
-.notFound,
-.noPermission {
+.gradingForm h4 {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.gradeInput {
+  max-width: 200px;
+}
+
+.gradingActions {
   display: flex;
-  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.noSelection {
+  flex: 1;
+  display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 400px;
+}
+
+.emptyState {
   text-align: center;
-  gap: var(--spacing-lg);
+  padding: var(--spacing-2xl);
 }
 
-.notFound h2,
-.noPermission h2 {
-  font-size: var(--font-size-xl);
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.notFound p,
-.noPermission p {
+.emptyState p {
   color: var(--text-secondary);
-  margin: 0;
+  font-size: var(--font-size-lg);
+}
+
+.noSubmissions {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: var(--spacing-lg);
 }
 
 @media (max-width: 768px) {
-  .container {
-    max-width: none;
-  }
-  
-  .header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .summaryGrid {
+  .layout {
     grid-template-columns: 1fr;
-  }
-  
-  .statsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .submissionsHeader {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .filters {
-    justify-content: center;
+    height: auto;
   }
   
   .submissionHeader {
-    flex-direction: column;
-    gap: var(--spacing-md);
-  }
-  
-  .submissionMeta {
-    align-items: flex-start;
-  }
-  
-  .fileInfo {
-    flex-direction: column;
-    gap: var(--spacing-md);
-  }
-  
-  .submissionActions {
-    justify-content: stretch;
-    flex-direction: column;
-  }
-  
-  .studentInfoModal {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .modalActions {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 }
